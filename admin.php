@@ -15,7 +15,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] != 'admin') {
 
 <body>
   <?php
-	$conn=mysqli_connect('localhost','root','','tmstrackingdelivery');
+	$conn=mysqli_connect('localhost','u320585682_TMS','Crctracking3','u320585682_TMS');
 	include_once'sidebar.php';
 ?>
 
