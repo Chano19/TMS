@@ -18,7 +18,7 @@
 
 <body>
 <?php
-	$conn=mysqli_connect('localhost','root','','tmstrackingdelivery');
+	$conn=mysqli_connect('localhost','root','','u320585682_TMS');
 	include_once'navbar.php';
 ?>
 

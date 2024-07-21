@@ -2,7 +2,7 @@
 $servername = "localhost";
 $email = "root";
 $password = "";
-$dbname = "tmstrackingdelivery";
+$dbname = "u320585682_TMS";
 
 // Create connection
 $conn = new mysqli($servername, $email, $password, $dbname);
