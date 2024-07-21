@@ -213,7 +213,7 @@ body {
 </head>
 <body>
 <?php
-	$conn=mysqli_connect('localhost','root','','u320585682_TMS');
+	$conn=mysqli_connect('localhost','u320585682_TMS','Crctracking3','u320585682_TMS');
 	include_once'navbar.php';
 ?>
 <br><br>

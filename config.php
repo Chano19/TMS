@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$email = "root";
-$password = "";
+$email = "u320585682_TMS";
+$password = "Crctracking3";
 $dbname = "u320585682_TMS";
 
 // Create connection
