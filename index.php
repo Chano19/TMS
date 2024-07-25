@@ -60,12 +60,10 @@
       <div class="container">
         <div class="row gx-lg-5 align-items-center">
           <div class="col-lg-6 mb-5 mb-lg-0">
-            <h1 class="my-4 display-3 text-dark fw-bold ls-tight">
+            <h1 class="my-4 display-3 text-dark fw-bold ls-tight text-center">
               Tracking Management System <br />
             </h1>
-            <p class="text-dark">
-              A Tracking Management System is a software solution designed to streamline and optimize the operations of warehouses and distribution centers. It leverages web technologies to provide users with a centralized platform for managing inventory, shipments, and tracking. 
-            </p>
+            <p class="text-dark"></p>
           </div>
         </div>
       </div>
