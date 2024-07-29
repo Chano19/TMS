@@ -43,7 +43,7 @@
           <div class="container">
             <div class="row justify-content-center">
               <div class="col-lg-6">
-                <div class="bg-white p-5 rounded shadow mt-5">
+                <div class="bg-transparent p-5 rounded shadow mt-5">
                   <h2 class="display-6 fw-bold text-center mb-4">Contact Us</h2>
                   <form action="contact.php" method="POST" id="contactform">
                     <div class="row">
