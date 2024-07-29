@@ -39,9 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
 	<style>
     body {
       background-color: white;
-      background-image: url("");
+      background-image: url("images/crcbg.jpg");
       background-repeat: no-repeat;
-      background-size: 1400px 1000px;
+      background-size: auto-sized;
+      background-attachment: fixed;
     }
     .sidebar {
       margin: 0;
@@ -96,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     <a class="active" href="user_management.php">User Management</a>
     <a href="manifest.php">Manifest</a>
 	<a href="#">HUB Management</a>
-    <a href="#contact">Contact</a>
     <a href="logout.php">Logout</a>
   </div>
 <div class="content">

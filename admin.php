@@ -16,6 +16,29 @@ $conn = new mysqli($servername, $email, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Function to get parcel count for a given location
+function getParcelCount($conn, $location) {
+    $query = $conn->prepare("SELECT COUNT(*) as total_parcels FROM manifests WHERE status LIKE ?");
+    $location_param = "%$location%";
+    $query->bind_param("s", $location_param);
+    $query->execute();
+    $result = $query->get_result();
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['total_parcels'];
+    } else {
+        return 0;
+    }
+}
+
+// Get parcel counts for each location
+$delivered_count = getParcelCount($conn, 'Delivered');
+$cancel_count = getParcelCount($conn, 'Cancel');
+$return_count = getParcelCount($conn, 'Return');
+
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,9 +53,10 @@ if ($conn->connect_error) {
   <style>
     body {
       background-color: white;
-      background-image: url("");
+      background-image: url("images/crcbg.jpg");
       background-repeat: no-repeat;
-      background-size: 1400px 1000px;
+      background-size: auto-sized;
+      background-attachment: fixed;
     }
     .sidebar {
       margin: 0;
@@ -83,13 +107,36 @@ if ($conn->connect_error) {
   <div class="wrapper sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
     <h3 class="text-center">Welcome to Admin</h3>
-      <a class="mt-3 active" href="admin.php">Dashboard</a>
-      <a class="mt-3" href="user_management.php">User Management</a>
-      <a href="manifest.php">Manifest</a>
-      <a href="#">HUB Management</a>
-      <a href="#contact">Contact</a>
-      <a href="logout.php">Logout</a>
+    <a class="active" href="admin.php">Dashboard</a>
+    <a href="user_management.php">User Management</a>
+    <a href="manifest.php">Manifest</a>
+    <a href="hub_management.php">HUB Management</a>
+    <a href="logout.php">Logout</a>
   </div>
+
+<div class="content"><br><br>
+    <div class="container" style="display: flex; flex-direction: row;">
+        <main style="flex: 1; padding: 1rem;">
+            <section class="cards" style="display: flex; gap: 1rem;">
+                <div class="card bg-success p-2 text-center" style="flex: 1;">
+                    <h2>Delivered</h2>
+                    <h5>Total Parcel: <?php echo $delivered_count; ?></h5><br>
+                    <a class="text-white" href="#.php">See parcel</a>
+                </div>
+                <div class="card bg-danger p-2 text-center" style="flex: 1;">
+                    <h2>Cancel</h2>
+                    <h5>Total Parcel: <?php echo $cancel_count; ?></h5><br>
+                    <a class="text-white" href="#.php">See parcel</a>
+                </div>
+                <div class="card bg-warning p-2 text-center" style="flex: 1;">
+                    <h2>Return</h2>
+                    <h5>Total Parcel: <?php echo $return_count; ?></h5><br>
+                    <a class="text-white" href="#.php">See parcel</a>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
 
 </body>
 </html>

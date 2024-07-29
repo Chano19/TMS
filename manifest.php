@@ -40,9 +40,10 @@ $result = $conn->query($sql);
   <style>
     body {
       background-color: white;
-      background-image: url("");
+      background-image: url("images/crcbg.jpg");
       background-repeat: no-repeat;
-      background-size: 1400px 1000px;
+      background-size: auto-sized;
+      background-attachment: fixed;
     }
     .sidebar {
       margin: 0;
@@ -86,6 +87,12 @@ $result = $conn->query($sql);
         text-align: center;
         float: none;
       }
+    }
+    .table{
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
@@ -146,43 +153,22 @@ $result = $conn->query($sql);
 <body>
   <div class="wrapper sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
-	<h3 class="text-center">Welcome to Admin</h3>
+    <h3 class="text-center">Welcome to Admin</h3>
     <a href="admin.php">Dashboard</a>
     <a href="user_management.php">User Management</a>
     <a class="active" href="manifest.php">Manifest</a>
-	<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">HUB Management</a>
-        <ul class="collapse list-unstyled" id="homeSubmenu">
-            <li>
-                <a href="batangas.php">Batangas</a>
-            </li>
-            <li>
-                <a href="calamba.php">Calamba</a>
-            </li>
-            <li>
-                <a href="makati.php">Makati</a>
-            </li>
-			<li>
-                <a href="pasay.php">Pasay</a>
-            </li>
-        </ul>
-    <a href="#contact">Contact</a>
+    <a href="hub_management.php">HUB Management</a>
     <a href="logout.php">Logout</a>
-  </div>
-  
-<section id="user">
-	
-</section> 
-  
-  
+  </div> 
   
 <section id="order">
 	<div class="content">
 	<div class="form-container" style="display: flex; justify-content: center; margin: 10px auto;">
-        <form action="manifest.php" method="post" enctype="multipart/form-data" style="width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #fff;">
+        <form action="manifest.php" method="post" enctype="multipart/form-data" style="width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: rgba(255, 255, 255, 0.8); box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
             <h2 style="text-align: center; color: #333;">Upload Manifest</h2>
             <label for="file" style="display: block; margin-bottom: 10px; color: #555;">Manifest File (CSV):</label>
             <input type="file" id="file" name="file" accept=".csv" style="width: 100%; padding: 8px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px;" required><br>
-            <input type="submit" name="upload_btn" style="width: 100%; padding: 10px; background-color: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer; background-color: #555;" value="Upload">
+            <input type="submit" class="bg-info" name="upload_btn" style="width: 100%; padding: 10px; background-color: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer; background-color: #555;" value="Upload">
         </form>
 <?php
 include('config.php'); // Include database connection
@@ -254,7 +240,7 @@ if (isset($_POST['upload_btn'])) {
             }
             ?>
         </select>
-        <input type="submit" name="search_btn" value="Search">
+        <input type="submit" class="bg-success fw-bold" name="search_btn" value="Search">
     </form><br>
 
 
@@ -295,7 +281,7 @@ if (isset($_POST['upload_btn'])) {
                         <option value='Arrived at Warehouse' " . ($row["status"] == 'Arrived at Warehouse' ? 'selected' : '') . ">Arrived at Warehouse</option>
                         <option value='In-transit to Hub' " . ($row["status"] == 'In-transit to Hub' ? 'selected' : '') . ">In-transit to Hub</option>
                     </select>
-                    <input type='submit' name='update_status' value='Update'>
+                    <input type='submit' class='bg-success' name='update_status' value='Update'>
                 </form>
             </td>
         </tr>";
