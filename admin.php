@@ -4,8 +4,13 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] != 'admin') {
     header('Location: loginpage.php');
     exit();
 }
+$servername = "localhost";
+$email = "u320585682_TMS";
+$password = "Crctracking3";
+$dbname = "u320585682_TMS";
+
 // Create connection
-$conn = new mysqli('localhost', 'root', '', 'tmstrackingdelivery');
+$conn = new mysqli($servername, $email, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
