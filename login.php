@@ -12,12 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (mysqli_num_rows($result) == 1) {
         $user = mysqli_fetch_assoc($result);
         $_SESSION['email'] = $user['email'];
+        $_SESSION['hub'] = $user['hub'];
         $_SESSION['role'] = $user['role'];
 
         if ($user['role'] == 'admin') {
             header('Location: admin.php');
+            exit();
+        } elseif ($user['hub'] == 'Batangas') {
+            header('Location: batangashub.php');
+            exit();
         } else {
-            header('Location: staffhub.php');
+            header('Location: calambahub.php');
         }
     } else {
         echo "Invalid email or password.";

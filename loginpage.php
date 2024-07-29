@@ -29,7 +29,7 @@ body {
     margin: 30px;
     background: rgba(255, 255, 255, 0.1);
     overflow: hidden;
-    backdrop-filter: blur(10px);
+    backdrop-filter: ;
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 15px;
     cursor: pointer;
@@ -61,7 +61,7 @@ body {
     border: none;
     outline: none;
     box-shadow: none;
-    color: #eee;
+    color: black;
 }
 
 .wrapper .card .input-field button.btn {
@@ -81,7 +81,7 @@ body {
 }
 
 .wrapper .card .input-field input::placeholder {
-    color: #eee;
+    color: black;
 }
 
 .wrapper .card .option {
@@ -147,8 +147,8 @@ body {
 .wrapper .card .btn.btn-primary {
     border-radius: 20px;
     width: 100px;
-    background-color: #fff;
-    color: #333;
+    background-color: blue;
+    color: white;
     border: none;
 }
 
@@ -205,30 +205,39 @@ body {
 
 <html>
 <head>
-  <title>Logitech App</title>
-  <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
-  <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://use.fontawesome.com/releases/v5.7.2/css/all.css"></script>
+    <title>CRC Tracking App</title>
+    <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
+    <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v5.7.2/css/all.css"></script>
+    <style>
+        body {
+            background-color: white;
+            background-image: url("images/crcbg.jpg");
+            background-repeat: no-repeat;
+            background-size: auto-sized;
+            background-attachment: fixed;
+        }
+    </style>
 </head>
 <body>
 <?php
-	$conn=mysqli_connect('localhost','u320585682_TMS','Crctracking3','u320585682_TMS');
-	include_once'navbar.php';
+    $conn=mysqli_connect('localhost','u320585682_TMS','Crctracking3','u320585682_TMS');
+    include_once'navbar.php';
 ?>
 <br><br>
 
-	<div class="wrapper">
-        <div class="card">
+    <div class="wrapper">
+        <div class="card shadow">
             <form method="POST" action="login.php" class="d-flex flex-column">
-                <div class="h3 text-center text-white">Login</div>
+                <div class="h3 text-center fw-bold text-dark">Login</div>
                 <div class="d-flex align-items-center input-field my-3 mb-4">
                     <span class="far fa-user p-2"></span>
-                    <input type="text" placeholder="Email" required class="form-control" id="email" name="email">
+                    <input type="text" placeholder="Email" required class="form-control fw-light" id="email" name="email">
                 </div>
                 <div class="d-flex align-items-center input-field mb-4">
                     <span class="fas fa-lock p-2"></span>
-                    <input type="password" placeholder="Password" required class="form-control" id="password" name="password">
+                    <input type="password" placeholder="Password" required class="form-control fw-light" id="password" name="password">
                     <button class="btn" onclick="showPassword()">
                         <span class="fas fa-eye-slash"></span>
                     </button>
@@ -236,7 +245,7 @@ body {
                 <div class="d-sm-flex align-items-sm-center justify-content-sm-between">
                     <div class="d-flex align-items-center">
                         <label class="option">
-                            <span class="text-light-white">Remember Me</span>
+                            <span class="text-light-dark">Remember Me</span>
                             <input type="checkbox" checked>
                             <span class="checkmark"></span>
                         </label>

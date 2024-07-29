@@ -1,7 +1,11 @@
 <?php
+$servername = "localhost";
+$email = "u320585682_TMS";
+$password = "Crctracking3";
+$dbname = "u320585682_TMS";
 
 // Create connection
-$conn = new mysqli('localhost','u320585682_TMS','Crctracking3','u320585682_TMS');
+$conn = new mysqli($servername, $email, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
@@ -14,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $searchPackageId = htmlspecialchars($_POST['searchPackageId']);
     
     // Prepare and bind
-    $stmt = $conn->prepare("SELECT product_id, customer_name, address, order_description, quantity, price, total_price, status FROM manifests WHERE product_id = ?");
-    $stmt->bind_param("s", $searchPackageId);
+    $stmt = $conn->prepare("SELECT product_id, awbnumber, order_id, customer_name, address, order_description, quantity, price, total_price, status FROM manifests WHERE product_id = ? OR awbnumber = ?");
+    $stmt->bind_param("ss", $searchPackageId,$searchPackageId);
     
     // Execute the statement
     $stmt->execute();
@@ -149,7 +153,9 @@ a:hover {
         if (isset($result) && $result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 echo "<div class='result'>
-                        <p><strong>Product ID:</strong> " . $row["product_id"] . "</p>
+                        <p><strong>Product Id:</strong> " . $row["product_id"] . "</p>
+                        <p><strong>AWB Number:</strong> " . $row["awbnumber"] . "</p>
+                        <p><strong>Order Id:</strong> " . $row["order_id"] . "</p>
                         <p><strong>Customer Name:</strong> " . $row["customer_name"] . "</p>
                         <p><strong>Address:</strong> " . $row["address"] . "</p>
                         <p><strong>Order Description:</strong> " . $row["order_description"] . "</p>
