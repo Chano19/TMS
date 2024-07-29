@@ -189,13 +189,13 @@ if (isset($_POST['upload_btn'])) {
 
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 // Bind the data to check for duplicates
-                $checkStmt->bind_param("iss", $data[0], $data[1], $data[4]);
+                $checkStmt->bind_param("sss", $data[0], $data[1], $data[4]);
                 $checkStmt->execute();
                 $result = $checkStmt->get_result();
 
                 if ($result->num_rows == 0) {
                     // No duplicate found, proceed with insertion
-                    $stmt->bind_param("issssisddss", $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6], $data[7], $data[8], $data[9], $data[10]);
+                    $stmt->bind_param("sssssssddss", $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6], $data[7], $data[8], $data[9], $data[10]);
                     $stmt->execute();
                 }
             }
