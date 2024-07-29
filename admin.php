@@ -5,33 +5,18 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] != 'admin') {
     exit();
 }
 // Create connection
-$conn = new mysqli('localhost','u320585682_TMS','Crctracking3','u320585682_TMS');
+$conn = new mysqli('localhost', 'root', '', 'tmstrackingdelivery');
 
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) {
-    $id = $_POST['id'];
-    $new_status = $_POST['status'];
-
-    $update_sql = "UPDATE manifests SET status='$new_status' WHERE id=$id";
-    if ($conn->query($update_sql) === TRUE) {
-        echo "";
-    } else {
-        echo "" . $conn->error;
-    }
-}
-
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status FROM manifests";
-$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CRC App</title>
+  <title>CRC Tracking App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -89,112 +74,17 @@ $result = $conn->query($sql);
     }
   </style>
 </head>
-<?php
-$search = "";
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['update_status'])) {
-        $id = $_POST['id'];
-        $new_status = $_POST['status'];
-
-        $update_sql = "UPDATE manifests SET status='$new_status' WHERE id=$id";
-        if ($conn->query($update_sql) === TRUE) {
-            echo "";
-        } else {
-            echo "Error updating record: " . $conn->error;
-        }
-    }
-
-    if (isset($_POST['search'])) {
-        $search = $_POST['search'];
-    }
-}
-
-$search_query = "";
-if ($search) {
-    $search = $conn->real_escape_string($search);
-    $search_query = "WHERE customer_name LIKE '%$search%' OR order_id LIKE '%$search%' OR product_id LIKE '%$search%'";
-}
-
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status FROM manifests $search_query";
-$result = $conn->query($sql);
-?>
 <body>
-  <div class="sidebar">
+  <div class="wrapper sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
-  <h3 class="text-center">Welcome to Admin</h3>
-    <a class="mt-3" href="#">Dashboard</a>
-  <a href="#contact">User Management</a>
-    <a class="active" href="#order">Order</a>
-    <a href="#contact">Contact</a>
-    <a href="logout.php">Logout</a>
+    <h3 class="text-center">Welcome to Admin</h3>
+      <a class="mt-3 active" href="admin.php">Dashboard</a>
+      <a class="mt-3" href="user_management.php">User Management</a>
+      <a href="manifest.php">Manifest</a>
+      <a href="#">HUB Management</a>
+      <a href="#contact">Contact</a>
+      <a href="logout.php">Logout</a>
   </div>
-  
-<section id="order">
-  <div class="content">
-  <div class="form-container" style="display: flex; justify-content: center; margin: 10px auto;">
-        <form action="display_manifest.php" method="post" enctype="multipart/form-data" style="width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #fff;">
-            <h2 style="text-align: center; color: #333;">Upload Manifest</h2>
-            <label for="file" style="display: block; margin-bottom: 10px; color: #555;">Manifest File (CSV):</label>
-            <input type="file" id="file" name="file" accept=".csv" style="width: 100%; padding: 8px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px;" required><br>
-            <input type="submit" style="width: 100%; padding: 10px; background-color: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer; background-color: #555;" value="Upload">
-        </form>
-    </div>
 
-    <h2 class="text-center p-5">List of Parcel</h2>
-        <!-- Search Form -->
-  <form method="post" action="admin.php">
-    <input type="text" name="search" value="<?php echo htmlspecialchars($search);?>" placeholder="Search...">
-    <input type="submit" name="search_btn" value="Search">
-  </form>
-
-     <table class="table table-hover p-4">
-        <thead class="bg-info">
-      <tr>
-        <th>Product ID</th>
-        <th>AWB Number</th>
-        <th>Customer Name</th>
-        <th>Address</th>
-        <th>Order ID</th>
-        <th>Order Description</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Total Price</th>
-        <th>Remarks</th>
-        <th>Status</th>
-      </tr>
-        </thead>
-<?php
- if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        echo "<tr>
-            <td>" . $row["product_id"]. "</td>
-            <td>" . $row["awbnumber"]. "</td>
-            <td>" . $row["customer_name"]. "</td>
-            <td>" . $row["address"]. "</td>
-            <td>" . $row["order_id"]. "</td>
-            <td>" . $row["order_description"]. "</td>
-            <td>" . $row["quantity"]. "</td>
-            <td>" . $row["price"]. "</td>
-            <td>" . $row["total_price"]. "</td>
-            <td>" . $row["remarks"]. "</td>
-            <td>
-                <form method='post' action='admin.php'>
-                    <input type='hidden' name='id' value='" . $row["id"] . "'>
-                    <select name='status'>
-                        <option value='Arrived at Warehouse' " . ($row["status"] == 'Arrived at Warehouse' ? 'selected' : '') . ">Arrived at Warehouse</option>
-                        <option value='In-transit to Hub' " . ($row["status"] == 'In-transit to Hub' ? 'selected' : '') . ">In-transit to Hub</option>
-                    </select>
-                    <input type='submit' name='update_status' value='Update'>
-                </form>
-            </td>
-        </tr>";
-    }
-} else {
-    echo "<tr><td colspan='13'>No data found</td></tr>";
-}
-$conn->close();
-?>
-  </div>
-</section>
 </body>
 </html>
