@@ -160,7 +160,6 @@ $result = $conn->query($sql);
     <a href="user_management.php">User Management</a>
     <a href="manifest.php">Manifest</a>
 	<a class="active" href="hub_management.php">HUB Management</a>
-    <a href="#contact">Contact</a>
     <a href="logout.php">Logout</a>
   </div>
 <div class="content"><br><br>
