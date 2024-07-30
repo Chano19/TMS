@@ -18,11 +18,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($user['role'] == 'admin') {
             header('Location: admin.php');
             exit();
+        } elseif ($user['role'] == 'Rider') {
+            header('Location: batangas_rider.php');
+            exit();
         } elseif ($user['hub'] == 'Batangas') {
             header('Location: batangashub.php');
             exit();
-        } else {
+        } elseif ($user['hub'] == 'Calamba') {
             header('Location: calambahub.php');
+            exit();
+        } elseif ($user['hub'] == 'Makati') {
+            header('Location: makatihub.php');
+            exit();
+        } elseif ($user['hub'] == 'Pasay') {
+            header('Location: pasayhub.php');
+            exit();
         }
     } else {
         echo "Invalid email or password.";
