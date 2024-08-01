@@ -185,7 +185,7 @@ if (isset($_POST['upload_btn'])) {
             $header = fgetcsv($handle, 1000, ",");
 
             // Prepare the SQL statement for inserting data
-            $stmt = $conn->prepare("INSERT INTO manifests (product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO manifests (product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             // Prepare the SQL statement for checking duplicates
             $checkStmt = $conn->prepare("SELECT * FROM manifests WHERE product_id = ? AND awbnumber = ?");
