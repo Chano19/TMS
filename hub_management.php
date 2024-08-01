@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 
 // Function to get parcel count for a given location
 function getParcelCount($conn, $location) {
-    $query = $conn->prepare("SELECT COUNT(*) as total_parcels FROM manifests WHERE address LIKE ?");
+    $query = $conn->prepare("SELECT COUNT(*) as total_parcels FROM manifests WHERE hub LIKE ?");
     $location_param = "%$location%";
     $query->bind_param("s", $location_param);
     $query->execute();
