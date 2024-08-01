@@ -10,10 +10,8 @@ $conn = new mysqli($servername, $email, $password, $dbname);
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
-} else {
-	$search_query = "WHERE hub='Batangas' && role='Rider'";
 }
-$sql2 = "SELECT id, name, contact FROM login $search_query";
+$sql2 = "SELECT id, name, contact, email FROM login $search_query";
 $result2 = $conn->query($sql2);
 ?>
 <!DOCTYPE html>
@@ -91,15 +89,24 @@ $result2 = $conn->query($sql2);
 <?php
 $search = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['update_status'])) {
-        $id = $_POST['id'];
-        $new_status = $_POST['status'];
+    if (isset($_POST['assign_rider'])) {
+        $parcel_id = $_POST['parcel_id'];
+        $rider_email = $_POST['assign_rider'];
 
-        $update_sql = "UPDATE manifests SET status='$new_status' WHERE id=$id";
-        if ($conn->query($update_sql) === TRUE) {
-            echo "";
+        $rider_query = "SELECT name FROM login WHERE email='$rider_email'";
+        $rider_result = $conn->query($rider_query);
+        if ($rider_result->num_rows > 0) {
+            $rider_row = $rider_result->fetch_assoc();
+            $status = $rider_row['name'];
+
+            $assign_sql = "UPDATE manifests SET status='$status' WHERE id='$parcel_id'";
+            if ($conn->query($assign_sql) === TRUE) {
+                echo "Rider assigned successfully!";
+            } else {
+                echo "Error assigning rider: " . $conn->error;
+            }
         } else {
-            echo "Error updating record: " . $conn->error;
+            echo "Rider not found!";
         }
     }
 
@@ -111,12 +118,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $search_query = "";
 if ($search) {
     $search = $conn->real_escape_string($search);
-    $search_query = "WHERE customer_name LIKE '%$search%' OR order_id LIKE '%$search%' OR product_id LIKE '%$search%'";
+    $search_query = "WHERE customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%'";
 } else {
-	$search_query = "WHERE address LIKE 'Batangas' && status='Out for Delivery'";
+  $search_query = "WHERE hub LIKE 'Batangas' && status='Out for Delivery'";
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks FROM manifests $search_query";
+$sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime FROM manifests $search_query";
 $result = $conn->query($sql);
 ?>
 <body>
@@ -133,26 +140,27 @@ $result = $conn->query($sql);
     <h2 class="text-center p-2 mt-5">List of Parcel</h2>
     <form action="" method="POST">
       <div class="table-responsive">
-	  
+    
         <!-- Search Form -->
-<form method="post" action="batangas_assign.php">
-    <input type="text" name="search" value="<?php echo htmlspecialchars($search);?>" placeholder="Search...">
-    <input type="submit" name="search_btn" value="Search">
-</form>
-	  
+        <form method="post" action="batangas_assign.php">
+            <input type="text" name="search" value="<?php echo htmlspecialchars($search);?>" placeholder="Search...">
+            <input type="submit" name="search_btn" value="Search">
+        </form>
+    
         <table class="table table-hover mt-2 border border-1">
           <thead class="bg-info">
             <tr>
-              <th>Product ID</th>
-              <th>AWB Number</th>
-              <th>Customer Name</th>
-              <th>Address</th>
-              <th>Order ID</th>
-              <th>Order Description</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Total Price</th>
-              <th>Remarks</th>
+        <th>Product ID</th>
+        <th>AWB Number</th>
+        <th>Customer Name</th>
+        <th>Hub</th>
+        <th>Address</th>
+        <th>Contact</th>
+        <th>Seller</th>
+        <th>Weight</th>
+        <th>Size</th>
+        <th>Price</th>
+        <th>Date/Time</th>
               <th></th>
             </tr>
           </thead>
@@ -165,15 +173,16 @@ $result = $conn->query($sql);
                         <td>' . $row["product_id"]. '</td>
                         <td>' . $row["awbnumber"]. '</td>
                         <td>' . $row["customer_name"]. '</td>
-                        <td>' . $row["address"]. '</td>
-                        <td>' . $row["order_id"]. '</td>
-                        <td>' . $row["order_description"]. '</td>
-                        <td>' . $row["quantity"]. '</td>
-                        <td>' . $row["price"]. '</td>
-                        <td>' . $row["total_price"]. '</td>
-                        <td>' . $row["remarks"]. '</td>
+                        <td>' . $row["hub"]. '</td>
+            <td>' . $row["address"]. '</td>
+            <td>' . $row["contact"]. '</td>
+            <td>' . $row["seller"]. '</td>
+            <td>' . $row["weight"]. '</td>
+            <td>' . $row["size"]. '</td>
+            <td>' . $row["price"]. '</td>
+            <td>' . $row["datetime"]. '</td>
                         <td>
-                          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#myModal">Rider</button>
+                          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#myModal" data-parcel-id="' . $row["id"] . '">Rider</button>
                         </td>
                       </tr>
                     ';
@@ -198,32 +207,35 @@ $result = $conn->query($sql);
 
       <!-- Modal body -->
       <div class="modal-body">
-	  <table class="table table-hover mt-2 border border-1 text-center">
-          <thead class="bg-info">
-            <tr>
-              <th>Name</th>
-              <th>Contact</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-		<?php
-              if($result2->num_rows > 0){
-                while($row = $result2->fetch_assoc()) {
-                    echo '
-                      <tr>
-                        <td>' . $row["name"]. '</td>
-                        <td>' . $row["contact"]. '</td>
-                        <td>
-                          <button type="button" class="btn btn-info">Assign</button>
-                        </td>
-                      </tr>
-                    ';
+        <form method="POST" action="dashboard.php">
+          <input type="hidden" id="parcelId" name="parcel_id">
+          <table class="table table-hover mt-2 border border-1 text-center">
+            <thead class="bg-info">
+              <tr>
+                <th>Name</th>
+                <th>Contact</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+                if($result2->num_rows > 0){
+                  while($row = $result2->fetch_assoc()) {
+                      echo '
+                        <tr>
+                          <td>' . $row["name"]. '</td>
+                          <td>' . $row["contact"]. '</td>
+                          <td>
+                            <button type="submit" name="assign_rider" class="btn btn-info" value="' . $row["email"] . '">Assign</button>
+                          </td>
+                        </tr>
+                      ';
+                  }
                 }
-              }
-            ?>
-		</tbody>
-        </table>
+              ?>
+            </tbody>
+          </table>
+        </form>
       </div>
 
       <!-- Modal footer -->
@@ -235,5 +247,14 @@ $result = $conn->query($sql);
   </div>
 </div>
   </div>
+  <script>
+    var myModal = document.getElementById('myModal');
+    myModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget;
+      var parcelId = button.getAttribute('data-parcel-id');
+      var modal = myModal;
+      modal.querySelector('#parcelId').value = parcelId;
+    });
+  </script>
 </body>
 </html>

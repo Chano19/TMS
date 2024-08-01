@@ -1,9 +1,5 @@
 <?php
 session_start();
-if (!isset($_SESSION['email']) || $_SESSION['hub'] != 'Calamba' || $_SESSION['role'] != 'Staff') {
-    header('Location: loginpage.php');
-    exit();
-}
 
 $servername = "localhost";
 $email = "u320585682_TMS";
@@ -17,26 +13,40 @@ $conn = new mysqli($servername, $email, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) {
+    $id = $_POST['id'];
+    $new_status = $_POST['status'];
+
+    $update_sql = "UPDATE manifests SET status='$new_status' WHERE id=$id";
+    if ($conn->query($update_sql) === TRUE) {
+        echo "";
+    } else {
+        echo "" . $conn->error;
+    }
+}
+
+$sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests";
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CRC Tracking App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <style>
     body {
-      background-color: white;
-      background-image: url("images/crcbg.jpg");
-      background-repeat: no-repeat;
-      background-size: auto-sized;
-      background-attachment: fixed;
+		background-color: white;
+		background-image: url("images/crcbg.jpg");
+		background-repeat: no-repeat;
+		background-size: auto-sized;
+		background-attachment: fixed;
     }
     .sidebar {
       margin: 0;
@@ -61,9 +71,10 @@ if ($conn->connect_error) {
       background-color: #555;
       color: white;
     }
-    .content {
+    div.content {
       margin-left: 200px;
-      padding: 16px;
+      padding: 1px 16px;
+      height: 1000px;
     }
     @media screen and (max-width: 700px) {
       .sidebar {
@@ -72,7 +83,7 @@ if ($conn->connect_error) {
         position: relative;
       }
       .sidebar a {float: left;}
-      .content {margin-left: 0;}
+      div.content {margin-left: 0;}
     }
     @media screen and (max-width: 400px) {
       .sidebar a {
@@ -80,14 +91,7 @@ if ($conn->connect_error) {
         float: none;
       }
     }
-    .card {
-      margin: 20px 0;
-      padding: 30px;
-      border: 1px solid #ddd3;
-      border-radius: 5px;
-      background-color: rgba(255, 255, 255, 0.9);
-    }
-    .ords, .rides {
+	.table{
       background-color: rgba(255, 255, 255, 0.9);
       padding: 20px;
       border-radius: 10px;
@@ -96,6 +100,27 @@ if ($conn->connect_error) {
   </style>
 </head>
 <?php
+// Function to get parcel count for a given location
+function getParcelCount($conn, $location) {
+    $query = $conn->prepare("SELECT COUNT(*) as total_parcels FROM manifests WHERE status LIKE ?");
+    $location_param = "%$location%";
+    $query->bind_param("s", $location_param);
+    $query->execute();
+    $result = $query->get_result();
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['total_parcels'];
+    } else {
+        return 0;
+    }
+}
+
+// Get parcel counts for each location
+$delivered_count = getParcelCount($conn, 'Delivered');
+$cancel_count = getParcelCount($conn, 'Cancel');
+$return_count = getParcelCount($conn, 'Return');
+
 $search = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['update_status'])) {
@@ -120,54 +145,58 @@ if ($search) {
     $search = $conn->real_escape_string($search);
     $search_query = "WHERE customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%'";
 } else {
-  $search_query = "WHERE hub LIKE 'Calamba'";
+	$search_query = "WHERE status LIKE 'Cancel%'";
 }
 
 $sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests $search_query";
 $result = $conn->query($sql);
 ?>
 <body>
-  <div class="sidebar">
-    <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
-    <h5 class="text-center mt-2">Welcome to <br> Calamba Hub</h5>
-    <a class="active mt-3" href="calambahub.php"><i class="fas fa-home"></i> Home</a>
-    <a href="calamba_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
-    <a href="calamba_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
-    <a href="calamba_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+  <div class="wrapper sidebar">
+    <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
+	<h3 class="text-center">Welcome to Admin</h3>
+    <a class="active" href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
+    <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <a href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
+    <a href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
-
-  <div class="content">
-  <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card">
-            <button type="button" class="ords btn btn-info active" onclick="location.href='calambahuborders.php'">
-              <i class="fas fa-box"></i> ORDERS
-            </button>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card">
-            <button type="button" class="rides btn btn-info" onclick="location.href='calambarider.php'">
-              <i class="fas fa-motorcycle"></i> RIDER
-            </button>
-          </div>
-        </div>
-      </div>
+ 
+<div class="content"><br><br>
+    <div class="container" style="display: flex; flex-direction: row;">
+        <main style="flex: 1; padding: 1rem;">
+            <section class="cards" style="display: flex; gap: 1rem;">
+                <div class="card bg-success p-2 text-center" style="flex: 1;">
+                    <h2>Delivered</h2>
+                    <h5>Total Parcel: <?php echo $delivered_count; ?></h5><br>
+                    <a class="text-white" href="admin_delivered.php">See parcel</a>
+                </div>
+                <div class="card bg-danger p-2 text-center" style="flex: 1;">
+                    <h2>Cancel</h2>
+                    <h5>Total Parcel: <?php echo $cancel_count; ?></h5><br>
+                    <a class="text-white" href="admin_cancel.php">See parcel</a>
+                </div>
+                <div class="card bg-warning p-2 text-center" style="flex: 1;">
+                    <h2>Return</h2>
+                    <h5>Total Parcel: <?php echo $return_count; ?></h5><br>
+                    <a class="text-white" href="admin_return.php">See parcel</a>
+                </div>
+            </section>
+        </main>
     </div>
-  
-    <h2 class="text-center p-5">List of Parcel</h2>
+
+<section id="manifest">
+    <h2 class="text-center p-5">List of Cancel</h2>
     <form action="" method="POST">
 
         <!-- Search Form -->
-<form method="post" action="calambahuborders.php">
+<form method="post" action="admin_cancel.php">
     <input type="text" name="search" value="<?php echo htmlspecialchars($search);?>" placeholder="Search...">
-    <input type="submit" name="search_btn" value="Search">
-</form>
+    <input type="submit" class="bg-success fw-bold" name="search_btn" value="Search">
+</form><br>
 
-
-      <table class="table table-hover mt-3 border border-1">
+      <table class="table table-hover p-4">
         <thead class="bg-info">
           <tr>
             <th>Product ID</th>
@@ -181,6 +210,7 @@ $result = $conn->query($sql);
             <th>Size</th>
             <th>Price</th>
             <th>Date/Time</th>
+            <th>Status</th>
           </tr>
         </thead>
           <?php
@@ -198,7 +228,8 @@ $result = $conn->query($sql);
                             <td>" . $row["size"]. "</td>
                             <td>" . $row["price"]. "</td>
                             <td>" . $row["datetime"]. "</td>
-                          </tr>";
+                            <td>" . $row["status"]. "</td>
+                        </tr>";
                 }
     } else {
         echo "<tr><td colspan='13'>No data found</td></tr>";
@@ -207,5 +238,6 @@ $result = $conn->query($sql);
     ?>
     </form>
   </div>
+</section>
 </body>
 </html>

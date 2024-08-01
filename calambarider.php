@@ -1,12 +1,22 @@
 <?php
 session_start();
-include('config.php'); // Include database connection
-
 if (!isset($_SESSION['email']) || $_SESSION['hub'] != 'Calamba' || $_SESSION['role'] != 'Staff') {
     header('Location: loginpage.php');
     exit();
 }
 
+$servername = "localhost";
+$email = "u320585682_TMS";
+$password = "Crctracking3";
+$dbname = "u320585682_TMS";
+
+// Create connection
+$conn = new mysqli($servername, $email, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -110,7 +120,7 @@ if ($search) {
     $search = $conn->real_escape_string($search);
     $search_query = "WHERE customer_name LIKE '%$search%' OR order_id LIKE '%$search%' OR product_id LIKE '%$search%'";
 } else {
-	$search_query = "WHERE hub LIKE 'Calamba' && role='Rider'";
+  $search_query = "WHERE hub LIKE 'Calamba' && role='Rider'";
 }
 
 $sql = "SELECT name, address, contact, email FROM login $search_query";
@@ -128,7 +138,7 @@ $result = $conn->query($sql);
   </div>
 
 <div class="content">
-	<div class="container">
+  <div class="container">
       <div class="row">
         <div class="col-md-6">
           <div class="card">
@@ -146,8 +156,8 @@ $result = $conn->query($sql);
         </div>
       </div>
     </div>
-	
-	 <h2 class="text-center p-5">List of Rider</h2>
+  
+   <h2 class="text-center p-5">List of Rider</h2>
     <form action="" method="POST">
 
 

@@ -1,4 +1,5 @@
 <?php
+// Database connection settings
 $servername = "localhost";
 $email = "u320585682_TMS";
 $password = "Crctracking3";
@@ -18,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $searchPackageId = htmlspecialchars($_POST['searchPackageId']);
     
     // Prepare and bind
-    $stmt = $conn->prepare("SELECT product_id, awbnumber, order_id, customer_name, address, order_description, quantity, price, total_price, status FROM manifests WHERE product_id = ? OR awbnumber = ?");
+    $stmt = $conn->prepare("SELECT product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status, rider_name FROM manifests WHERE product_id = ? OR awbnumber = ?");
     $stmt->bind_param("ss", $searchPackageId,$searchPackageId);
     
     // Execute the statement
@@ -155,15 +156,18 @@ a:hover {
                 echo "<div class='result'>
                         <p><strong>Product Id:</strong> " . $row["product_id"] . "</p>
                         <p><strong>AWB Number:</strong> " . $row["awbnumber"] . "</p>
-                        <p><strong>Order Id:</strong> " . $row["order_id"] . "</p>
                         <p><strong>Customer Name:</strong> " . $row["customer_name"] . "</p>
+                        <p><strong>Hub:</strong> " . $row["hub"] . "</p>
                         <p><strong>Address:</strong> " . $row["address"] . "</p>
-                        <p><strong>Order Description:</strong> " . $row["order_description"] . "</p>
-                        <p><strong>Quantity:</strong> " . $row["quantity"] . "</p>
+                        <p><strong>Contact:</strong> " . $row["contact"] . "</p>
+                        <p><strong>Seller:</strong> " . $row["seller"] . "</p>
+                        <p><strong>Weght:</strong> " . $row["weight"] . "</p>
+                        <p><strong>Size:</strong> " . $row["size"] . "</p>
                         <p><strong>Price:</strong> " . $row["price"] . "</p>
-                        <p><strong>Total Price:</strong> " . $row["total_price"] . "</p>
+                        <p><strong>Date/Time:</strong> " . $row["datetime"] . "</p>
                         <p><strong>Status:</strong> " . $row["status"] . "</p>
-                      </div>";
+                        <p><strong>Rider Name:</strong> " . $row["rider_name"] . "</p>
+                    </div>";
             }
         } else {
             echo "<p>No package found with ID: " . htmlspecialchars($searchPackageId) . "</p>";

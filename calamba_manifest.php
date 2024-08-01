@@ -1,6 +1,16 @@
 <?php
-session_start();
-include('config.php'); // Include database connection
+$servername = "localhost";
+$email = "u320585682_TMS";
+$password = "Crctracking3";
+$dbname = "u320585682_TMS";
+
+// Create connection
+$conn = new mysqli($servername, $email, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) {
     $id = $_POST['id'];
@@ -14,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) {
     }
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status FROM manifests";
+$sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests";
 $result = $conn->query($sql);
 ?><!DOCTYPE html>
 <html lang="en">
@@ -110,12 +120,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $search_query = "";
 if ($search) {
     $search = $conn->real_escape_string($search);
-    $search_query = "WHERE customer_name LIKE '%$search%' OR order_id LIKE '%$search%' OR product_id LIKE '%$search%'";
+    $search_query = "WHERE customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%'";
 } else {
-	$search_query = "WHERE address LIKE 'Calamba'";
+    $search_query = "WHERE hub LIKE 'Calamba'";
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status FROM manifests $search_query";
+$sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests $search_query";
 $result = $conn->query($sql);
 ?>
 <body>
@@ -145,13 +155,14 @@ $result = $conn->query($sql);
             <th>Product ID</th>
             <th>AWB Number</th>
             <th>Customer Name</th>
+            <th>Hub</th>
             <th>Address</th>
-            <th>Order ID</th>
-            <th>Order Description</th>
-            <th>Quantity</th>
+            <th>Contact</th>
+            <th>Seller</th>
+            <th>Weight</th>
+            <th>Size</th>
             <th>Price</th>
-            <th>Total Price</th>
-            <th>Remarks</th>
+            <th>Date/Time</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -162,13 +173,14 @@ $result = $conn->query($sql);
                             <td>" . $row["product_id"]. "</td>
                             <td>" . $row["awbnumber"]. "</td>
                             <td>" . $row["customer_name"]. "</td>
+                            <td>" . $row["hub"]. "</td>
                             <td>" . $row["address"]. "</td>
-                            <td>" . $row["order_id"]. "</td>
-                            <td>" . $row["order_description"]. "</td>
-                            <td>" . $row["quantity"]. "</td>
+                            <td>" . $row["contact"]. "</td>
+                            <td>" . $row["seller"]. "</td>
+                            <td>" . $row["weight"]. "</td>
+                            <td>" . $row["size"]. "</td>
                             <td>" . $row["price"]. "</td>
-                            <td>" . $row["total_price"]. "</td>
-                            <td>" . $row["remarks"]. "</td>
+                            <td>" . $row["datetime"]. "</td>
                             <td>
                                 <form method='post' action='calamba_manifest.php'>
                                     <input type='hidden' name='id' value='" . $row["id"] . "'>

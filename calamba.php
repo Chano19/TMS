@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 $servername = "localhost";
 $email = "u320585682_TMS";
 $password = "Crctracking3";
@@ -26,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) {
     }
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status FROM manifests";
+$sql = "SELECT id, product_id, awbnumber, customer_name, address, contact, seller, weight, size, price, datetime, status FROM manifests";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -35,17 +34,18 @@ $result = $conn->query($sql);
   <meta charset="UTF-8">
   <title>CRC Tracking App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <style>
     body {
-		background-color: white;
-		background-image: url("images/crcbg.jpg");
-		background-repeat: no-repeat;
-		background-size: auto-sized;
-		background-attachment: fixed;
+        background-color: white;
+        background-image: url("images/crcbg.jpg");
+        background-repeat: no-repeat;
+        background-size: auto-sized;
+        background-attachment: fixed;
     }
     .sidebar {
       margin: 0;
@@ -90,7 +90,7 @@ $result = $conn->query($sql);
         float: none;
       }
     }
-	.table{
+    .table{
       background-color: rgba(255, 255, 255, 0.9);
       padding: 20px;
       border-radius: 10px;
@@ -144,26 +144,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $search_query = "";
 if ($search) {
     $search = $conn->real_escape_string($search);
-    $search_query = "WHERE customer_name LIKE '%$search%' OR order_id LIKE '%$search%' OR product_id LIKE '%$search%'";
+    $search_query = "WHERE customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%' AND address LIKE 'Calamba%'";
 } else {
-	$search_query = "WHERE address LIKE 'Calamba'";
+    $search_query = "WHERE address LIKE 'Calamba%'";
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status FROM manifests $search_query";
+$sql = "SELECT id, product_id, awbnumber, customer_name, address, contact, seller, weight, size, price, datetime, status FROM manifests $search_query";
 $result = $conn->query($sql);
 ?>
 <body>
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
-	<h3 class="text-center">Welcome to Admin</h3>
-    <a href="admin.php">Dashboard</a>
-    <a href="user_management.php">User Management</a>
-    <a href="manifest.php">Manifest</a>
-	<a class="active" href="hub_management.php">HUB Management</a>
-    <a href="logout.php">Logout</a>
+    <h3 class="text-center">Welcome to Admin</h3>
+    <a href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
+    <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <a class="active" href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
+    <a href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 <div class="content"><br><br>
-	<div class="container" style="display: flex; flex-direction: row;">
+    <div class="container" style="display: flex; flex-direction: row;">
         <main style="flex: 1; padding: 1rem;">
             <section class="cards" style="display: flex; gap: 1rem;">
                 <div class="card bg-primary p-2 text-center" style="flex: 1;">
@@ -189,7 +190,7 @@ $result = $conn->query($sql);
             </section>
         </main>
     </div>
-	
+    
 <section id="manifest">
     <h2 class="text-center p-5">List of Parcel in Calamba</h2>
     <form action="" method="POST">
@@ -207,12 +208,12 @@ $result = $conn->query($sql);
             <th>AWB Number</th>
             <th>Customer Name</th>
             <th>Address</th>
-            <th>Order ID</th>
-            <th>Order Description</th>
-            <th>Quantity</th>
+            <th>Contact</th>
+            <th>Seller</th>
+            <th>Weight</th>
+            <th>Size</th>
             <th>Price</th>
-            <th>Total Price</th>
-            <th>Remarks</th>
+            <th>Date/Time</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -224,23 +225,13 @@ $result = $conn->query($sql);
                             <td>" . $row["awbnumber"]. "</td>
                             <td>" . $row["customer_name"]. "</td>
                             <td>" . $row["address"]. "</td>
-                            <td>" . $row["order_id"]. "</td>
-                            <td>" . $row["order_description"]. "</td>
-                            <td>" . $row["quantity"]. "</td>
+                            <td>" . $row["contact"]. "</td>
+                            <td>" . $row["seller"]. "</td>
+                            <td>" . $row["weight"]. "</td>
+                            <td>" . $row["size"]. "</td>
                             <td>" . $row["price"]. "</td>
-                            <td>" . $row["total_price"]. "</td>
-                            <td>" . $row["remarks"]. "</td>
-                            <td>
-                                <form method='post' action='calamba.php'>
-                                    <input type='hidden' name='id' value='" . $row["id"] . "'>
-                                    <select name='status'>
-                                        <option value='In-transit to Hub' " . ($row["status"] == 'In-transit to HUB' ? 'selected' : '') . ">In-transit to Hub</option>
-                                        <option value='Arrived at HUB' " . ($row["status"] == 'Arrived at HUB' ? 'selected' : '') . ">Arrived at HUB</option>
-                                        <option value='Out for Delivery' " . ($row["status"] == 'Out for Delivery' ? 'selected' : '') . ">Out for Delivery</option>
-                                    </select>
-                                    <input type='submit' name='update_status' value='Update'>
-                                </form>
-                            </td>
+                            <td>" . $row["datetime"]. "</td>
+                            <td>" . $row["status"]. "</td>
                         </tr>";
                 }
     } else {

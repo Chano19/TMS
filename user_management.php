@@ -21,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
         echo "Error: " . $stmt->error;
     }
 
-    $stmt->close();
     $conn->close();
 }
 ?>
@@ -32,17 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRC Tracking App</title>
     <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<style>
+    <style>
     body {
-      background-color: white;
-      background-image: url("images/crcbg.jpg");
-      background-repeat: no-repeat;
-      background-size: auto-sized;
-      background-attachment: fixed;
+        background-color: white;
+        background-image: url("images/crcbg.jpg");
+        background-repeat: no-repeat;
+        background-size: auto-sized;
+        background-attachment: fixed;
     }
     .sidebar {
       margin: 0;
@@ -90,14 +90,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
   </style>
 </head>
 <body>
-	<div class="wrapper sidebar">
+    <div class="wrapper sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
-	<h3 class="text-center">Welcome to Admin</h3>
-    <a href="admin.php">Dashboard</a>
-    <a class="active" href="user_management.php">User Management</a>
-    <a href="manifest.php">Manifest</a>
-	<a href="#">HUB Management</a>
-    <a href="logout.php">Logout</a>
+    <h3 class="text-center">Welcome to Admin</h3>
+    <a href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
+    <a class="active" href="user_management.php"><i class="fas fa-users"></i> User Management</a>
+    <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <a href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
+    <a href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 <div class="content">
 <div class="container">

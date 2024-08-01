@@ -25,7 +25,7 @@ body {
 
 .wrapper .card {
     max-width: 400px;
-    min-height: 450px;
+    min-height: 400px;
     margin: 30px;
     background: rgba(255, 255, 255, 0.1);
     overflow: hidden;
@@ -207,6 +207,7 @@ body {
 <head>
     <title>CRC Tracking App</title>
     <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v5.7.2/css/all.css"></script>
@@ -229,12 +230,12 @@ body {
 
     <div class="wrapper">
         <div class="card shadow">
-            <form method="POST" action="login.php" class="d-flex flex-column">
-                <div class="h3 text-center fw-bold text-dark">Login</div>
+            <form method="POST" action="login.php" class="d-flex flex-column"><br>
+                <div class="h3 text-center fw-bold text-dark">Login</div><br>
                 <div class="d-flex align-items-center input-field my-3 mb-4">
                     <span class="far fa-user p-2"></span>
                     <input type="text" placeholder="Email" required class="form-control fw-light" id="email" name="email">
-                </div>
+                </div><br>
                 <div class="d-flex align-items-center input-field mb-4">
                     <span class="fas fa-lock p-2"></span>
                     <input type="password" placeholder="Password" required class="form-control fw-light" id="password" name="password">
@@ -242,35 +243,10 @@ body {
                         <span class="fas fa-eye-slash"></span>
                     </button>
                 </div>
-                <div class="d-sm-flex align-items-sm-center justify-content-sm-between">
-                    <div class="d-flex align-items-center">
-                        <label class="option">
-                            <span class="text-light-dark">Remember Me</span>
-                            <input type="checkbox" checked>
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                </div>
                 <div class="my-3">
                     <input type="submit" value="Login" class="btn btn-primary">
                 </div>
             </form>
-            <div class="position-relative border-bottom my-3 line">
-                <span class="connect">or connect with</span>
-            </div>
-            <div class="text-center py-3 connections">
-                <a href="https://wwww.facebook.com" target="_blank" class="px-2">
-                    <img src="https://www.dpreview.com/files/p/articles/4698742202/facebook.jpeg" alt="">
-                </a>
-                <a href="https://www.google.com" target="_blank" class="px-2">
-                    <img src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"
-                        alt="">
-                </a>
-                <a href="https://www.github.com" target="_blank" class="px-2">
-                    <img src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png"
-                        alt="">
-                </a>
-            </div>
         </div>
     </div>
 

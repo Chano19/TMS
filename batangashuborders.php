@@ -4,7 +4,6 @@ if (!isset($_SESSION['email']) || $_SESSION['hub'] != 'Batangas' || $_SESSION['r
     header('Location: loginpage.php');
     exit();
 }
-
 $servername = "localhost";
 $email = "u320585682_TMS";
 $password = "Crctracking3";
@@ -17,7 +16,6 @@ $conn = new mysqli($servername, $email, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -119,12 +117,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $search_query = "";
 if ($search) {
     $search = $conn->real_escape_string($search);
-    $search_query = "WHERE customer_name LIKE '%$search%' OR order_id LIKE '%$search%' OR product_id LIKE '%$search%'";
+    $search_query = "WHERE customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%'";
 } else {
-	$search_query = "WHERE address LIKE 'Batangas'";
+  $search_query = "WHERE hub LIKE 'Batangas'";
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status FROM manifests $search_query";
+$sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests $search_query";
 $result = $conn->query($sql);
 ?>
 <body>
@@ -139,7 +137,7 @@ $result = $conn->query($sql);
   </div>
 
   <div class="content">
-	<div class="container">
+  <div class="container">
       <div class="row">
         <div class="col-md-6">
           <div class="card">
@@ -157,7 +155,7 @@ $result = $conn->query($sql);
         </div>
       </div>
     </div>
-	
+  
     <h2 class="text-center p-5">List of Parcel</h2>
     <form action="" method="POST">
 
@@ -174,13 +172,14 @@ $result = $conn->query($sql);
             <th>Product ID</th>
             <th>AWB Number</th>
             <th>Customer Name</th>
+            <th>Hub</th>
             <th>Address</th>
-            <th>Order ID</th>
-            <th>Order Description</th>
-            <th>Quantity</th>
+            <th>Contact</th>
+            <th>Seller</th>
+            <th>Weight</th>
+            <th>Size</th>
             <th>Price</th>
-            <th>Total Price</th>
-            <th>Remarks</th>
+            <th>Date/Time</th>
           </tr>
         </thead>
           <?php
@@ -190,20 +189,21 @@ $result = $conn->query($sql);
                             <td>" . $row["product_id"]. "</td>
                             <td>" . $row["awbnumber"]. "</td>
                             <td>" . $row["customer_name"]. "</td>
+                            <td>" . $row["hub"]. "</td>
                             <td>" . $row["address"]. "</td>
-                            <td>" . $row["order_id"]. "</td>
-                            <td>" . $row["order_description"]. "</td>
-                            <td>" . $row["quantity"]. "</td>
+                            <td>" . $row["contact"]. "</td>
+                            <td>" . $row["seller"]. "</td>
+                            <td>" . $row["weight"]. "</td>
+                            <td>" . $row["size"]. "</td>
                             <td>" . $row["price"]. "</td>
-                            <td>" . $row["total_price"]. "</td>
-                            <td>" . $row["remarks"]. "</td>
+                            <td>" . $row["datetime"]. "</td>
                         </tr>";
                 }
-    } else {
-        echo "<tr><td colspan='13'>No data found</td></tr>";
-    }
-    $conn->close();
-    ?>
+            } else {
+              echo "<tr><td colspan='13'>No data found</td></tr>";
+            }
+            $conn->close();
+          ?>
     </form>
   </div>
 </body>

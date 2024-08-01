@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 $servername = "localhost";
 $email = "u320585682_TMS";
 $password = "Crctracking3";
@@ -44,17 +43,18 @@ $conn->close();
   <meta charset="UTF-8">
   <title>CRC Tracking App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <style>
     body {
-		background-color: white;
-		background-image: url("images/crcbg.jpg");
-		background-repeat: no-repeat;
-		background-size: auto-sized;
-		background-attachment: fixed;
+        background-color: white;
+        background-image: url("images/crcbg.jpg");
+        background-repeat: no-repeat;
+        background-size: auto-sized;
+        background-attachment: fixed;
     }
     .sidebar {
       margin: 0;
@@ -104,19 +104,20 @@ $conn->close();
 <body>
   <div class="wrapper sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
-	<h3 class="text-center">Welcome to Admin</h3>
-    <a href="admin.php">Dashboard</a>
-    <a href="user_management.php">User Management</a>
-    <a href="manifest.php">Manifest</a>
-	<a class="active" href="hub_management.php">HUB Management</a>
-    <a href="logout.php">Logout</a>
+    <h3 class="text-center">Welcome to Admin</h3>
+    <a href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
+    <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <a class="active" href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
+    <a href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 
 <div class="content"><br><br>
     <div class="container justify-content-center" style="display: flex; flex-direction: row;">
         <main style="flex: ; padding: 1rem;">
             <section class="cards" style="display: flex; gap: 1rem;">
-				<div class="card-row">
+                <div class="card-row">
                 <div class="card bg-primary p-4 text-center" style="flex: 1; width: 23rem;">
                     <h2>Batangas</h2>
                     <h5>Total Parcel: <?php echo $batangas_count; ?></h5><br>
@@ -128,7 +129,7 @@ $conn->close();
                     <a class="text-white" href="calamba.php">See parcel</a>
                 </div>
                 </div><br>
-				<div class="card-row">
+                <div class="card-row">
                 <div class="card bg-success p-4 text-center" style="flex: 1; width: 23rem;">
                     <h2>Makati</h2>
                     <h5>Total Parcel: <?php echo $makati_count; ?></h5><br>

@@ -1,16 +1,9 @@
-<?php
-session_start();
-if (!isset($_SESSION['email']) || $_SESSION['hub'] != 'Pasay' || $_SESSION['role'] != 'Staff') {
-    header('Location: loginpage.php');
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRC Tracking App</title>
+  <title>CRC App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -22,7 +15,7 @@ if (!isset($_SESSION['email']) || $_SESSION['hub'] != 'Pasay' || $_SESSION['role
       background-color: white;
       background-image: url("images/crcbg.jpg");
       background-repeat: no-repeat;
-      background-size: auto-sized;
+      background-size: 1800px 900px;
       background-attachment: fixed;
     }
     .sidebar {
@@ -73,45 +66,55 @@ if (!isset($_SESSION['email']) || $_SESSION['hub'] != 'Pasay' || $_SESSION['role
       border: 1px solid #ddd3;
       border-radius: 5px;
       background-color: rgba(255, 255, 255, 0.9);
+      font-family: "Times New Roman", Times, serif;
+      margin-top: 30px;
     }
-    .ords, .rides {
+    .ords {
       background-color: rgba(255, 255, 255, 0.9);
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .report{
+      border-radius: 20px;
+    }
+    .send{
+      margin-top: 3px;
+      margin-left: 750px;
+    }
+    .table{
+      margin-top: 20px;
+    }
+    h4{
+      text-align: left;
+      margin-left: 900px;
     }
   </style>
 </head>
 <body>
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
-    <h5 class="text-center mt-2">Welcome to <br> Pasay Hub</h5>
-    <a class="active mt-3" href="pasayhub.php"><i class="fas fa-home"></i> Home</a>
-    <a href="pasay_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
-    <a href="pasay_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
-    <a href="pasay_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
-    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <h3 class="text-center">Welcome to Rider Hub</h3>
+    <a href="rider_profile.php">Profile</a>
+    <a href="batangas_rider.php">Order</a>
+	<a class="active" href="reportpage.php">Report</a>
+    <a href="logout.php">Logout</a>
   </div>
 
   <div class="content">
     <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card">
-            <button type="button" class="ords btn btn-info" onclick="location.href='pasayhuborders.php'">
-              <i class="fas fa-box"></i> ORDERS
-            </button>
+      <div class="card">
+        <div class="row">
+          <div class="col-md-10">
+            <h2>Report</h2>
+            <textarea class="report" name="comments" rows="5" cols="100" placeholder="Write your comments here..." maxlength="600"></textarea>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="card">
-            <button type="button" class="rides btn btn-info" onclick="location.href='pasayhuborders.php'">
-              <i class="fas fa-motorcycle"></i> RIDER
-            </button>
-          </div>
+        <div class="col-md-4">
+          <button class="send">Report</button>
         </div>
       </div>
-    </div>
+        </div>
   </div>
 </body>
 </html>

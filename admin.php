@@ -46,6 +46,7 @@ $conn->close();
   <meta charset="UTF-8">
   <title>CRC Tracking App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -107,12 +108,12 @@ $conn->close();
   <div class="wrapper sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
     <h3 class="text-center">Welcome to Admin</h3>
-    <a class="active" href="admin.php">Dashboard</a>
-    <a href="user_management.php">User Management</a>
-    <a href="manifest.php">Manifest</a>
-    <a href="hub_management.php">HUB Management</a>
-    <a href="logout.php">Logout</a>
-  </div>
+    <a class="active" href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
+    <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <a href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
+    <a href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>  </div>
 
 <div class="content"><br><br>
     <div class="container" style="display: flex; flex-direction: row;">

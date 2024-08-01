@@ -1,4 +1,5 @@
 <?php
+session_start();
 $servername = "localhost";
 $email = "u320585682_TMS";
 $password = "Crctracking3";
@@ -24,81 +25,82 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) {
     }
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status FROM manifests";
+$sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CRC Tracking App</title>
-  <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
-  <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <style>
+    <meta charset="UTF-8">
+    <title>CRC Tracking App</title>
+    <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
     body {
-      background-color: white;
-      background-image: url("images/crcbg.jpg");
-      background-repeat: no-repeat;
-      background-size: auto-sized;
-      background-attachment: fixed;
+        background-color: white;
+        background-image: url("images/crcbg.jpg");
+        background-repeat: no-repeat;
+        background-size: auto-sized;
+        background-attachment: fixed;
     }
     .sidebar {
-      margin: 0;
-      padding: 0;
-      width: 200px;
-      background-color: #f1f1f1;
-      position: fixed;
-      height: 100%;
-      overflow: auto;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        background-color: #f1f1f1;
+        position: fixed;
+        height: 100%;
+        overflow: auto;
     }
     .sidebar a {
-      display: block;
-      color: black;
-      padding: 16px;
-      text-decoration: none;
+        display: block;
+        color: black;
+        padding: 16px;
+        text-decoration: none;
     }
     .sidebar a.active {
-      background-color: #04AA6D;
-      color: white;
+        background-color: #04AA6D;
+        color: white;
     }
     .sidebar a:hover:not(.active) {
-      background-color: #555;
-      color: white;
+        background-color: #555;
+        color: white;
     }
     div.content {
-      margin-left: 200px;
-      padding: 1px 16px;
-      height: 1000px;
+        margin-left: 200px;
+        padding: 1px 16px;
+        height: 1000px;
     }
     @media screen and (max-width: 700px) {
-      .sidebar {
+        .sidebar {
         width: 100%;
         height: auto;
         position: relative;
       }
-      .sidebar a {float: left;}
-      div.content {margin-left: 0;}
+    .sidebar a {float: left;}
+        div.content {margin-left: 0;}
     }
     @media screen and (max-width: 400px) {
-      .sidebar a {
-        text-align: center;
-        float: none;
+        .sidebar a {
+            text-align: center;
+            float: none;
       }
     }
     .table{
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-  </style>
+    </style>
 </head>
 <?php
 // Fetch distinct addresses for the dropdown filter
-$addresses_result = $conn->query("SELECT DISTINCT address FROM manifests");
+$addresses_result = $conn->query("SELECT DISTINCT hub FROM manifests");
 
 // Fetch distinct statuses for the dropdown filter
 $statuses_result = $conn->query("SELECT DISTINCT status FROM manifests");
@@ -123,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['search'])) {
         $search = $_POST['search'];
     }
-	if (isset($_POST['filter_address'])) {
+    if (isset($_POST['filter_address'])) {
         $filter_address = $_POST['filter_address'];
     }
 
@@ -135,11 +137,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $search_query = "WHERE 1=1";
 if ($search) {
     $search = $conn->real_escape_string($search);
-     $search_query .= " AND (customer_name LIKE '%$search%' OR order_id LIKE '%$search%' OR product_id LIKE '%$search%')";
+     $search_query .= " AND (customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%')";
 }
 if ($filter_address) {
     $filter_address = $conn->real_escape_string($filter_address);
-    $search_query .= " AND address = '$filter_address'";
+    $search_query .= " AND hub LIKE '$filter_address'";
 }
 
 if ($filter_status) {
@@ -147,23 +149,24 @@ if ($filter_status) {
     $search_query .= " AND status = '$filter_status'";
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status FROM manifests $search_query";
+$sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests $search_query";
 $result = $conn->query($sql);
 ?>
 <body>
   <div class="wrapper sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
     <h3 class="text-center">Welcome to Admin</h3>
-    <a href="admin.php">Dashboard</a>
-    <a href="user_management.php">User Management</a>
-    <a class="active" href="manifest.php">Manifest</a>
-    <a href="hub_management.php">HUB Management</a>
-    <a href="logout.php">Logout</a>
-  </div> 
+    <a href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
+    <a class="active" href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <a href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
+    <a href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
   
 <section id="order">
-	<div class="content">
-	<div class="form-container" style="display: flex; justify-content: center; margin: 10px auto;">
+    <div class="content">
+    <div class="form-container" style="display: flex; justify-content: center; margin: 10px auto;">
         <form action="manifest.php" method="post" enctype="multipart/form-data" style="width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: rgba(255, 255, 255, 0.8); box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
             <h2 style="text-align: center; color: #333;">Upload Manifest</h2>
             <label for="file" style="display: block; margin-bottom: 10px; color: #555;">Manifest File (CSV):</label>
@@ -182,20 +185,20 @@ if (isset($_POST['upload_btn'])) {
             $header = fgetcsv($handle, 1000, ",");
 
             // Prepare the SQL statement for inserting data
-            $stmt = $conn->prepare("INSERT INTO manifests (product_id, awbnumber, customer_name, address, order_id, order_description, quantity, price, total_price, remarks, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO manifests (product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             // Prepare the SQL statement for checking duplicates
-            $checkStmt = $conn->prepare("SELECT * FROM manifests WHERE product_id = ? AND awbnumber = ? AND order_id = ?");
+            $checkStmt = $conn->prepare("SELECT * FROM manifests WHERE product_id = ? AND awbnumber = ?");
 
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 // Bind the data to check for duplicates
-                $checkStmt->bind_param("sss", $data[0], $data[1], $data[4]);
+                $checkStmt->bind_param("ss", $data[0], $data[1]);
                 $checkStmt->execute();
                 $result = $checkStmt->get_result();
 
                 if ($result->num_rows == 0) {
                     // No duplicate found, proceed with insertion
-                    $stmt->bind_param("sssssssddss", $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6], $data[7], $data[8], $data[9], $data[10]);
+                    $stmt->bind_param("sssssdsssdds", $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6], $data[7], $data[8], $data[9], $data[10], $data[11]);
                     $stmt->execute();
                 }
             }
@@ -216,18 +219,15 @@ if (isset($_POST['upload_btn'])) {
 
     <h2 class="text-center p-5">List of Parcel</h2>
         <!-- Search Form -->
-	<form method="post" action="manifest.php">
+    <form method="post" action="manifest.php">
         <input type="text" name="search" value="<?php echo htmlspecialchars($search);?>" placeholder="Search...">
         <select name="filter_address">
             <option selected disabled>Select Address</option>
-            <?php
-            if ($addresses_result->num_rows > 0) {
-                while($address_row = $addresses_result->fetch_assoc()) {
-                    $selected = ($filter_address == $address_row['address']) ? 'selected' : '';
-                    echo "<option value='" . htmlspecialchars($address_row['address']) . "' $selected>" . htmlspecialchars($address_row['address']) . "</option>";
-                }
-            }
-            ?>
+            <!-- Static options -->
+        <option value="Batangas" <?php echo ($filter_address == 'Batangas') ? 'selected' : ''; ?>>Batangas</option>
+        <option value="Calamba" <?php echo ($filter_address == 'Calamba') ? 'selected' : ''; ?>>Calamba</option>
+        <option value="Makati" <?php echo ($filter_address == 'Makati') ? 'selected' : ''; ?>>Makati</option>
+        <option value="Pasay" <?php echo ($filter_address == 'Pasay') ? 'selected' : ''; ?>>Pasay</option>
         </select>
         <select name="filter_status">
             <option selected disabled>Select Status</option>
@@ -246,19 +246,20 @@ if (isset($_POST['upload_btn'])) {
 
      <table class="table table-hover p-4">
         <thead class="bg-info">
-			<tr>
-				<th>Product ID</th>
-				<th>AWB Number</th>
-				<th>Customer Name</th>
-				<th>Address</th>
-				<th>Order ID</th>
-				<th>Order Description</th>
-				<th>Quantity</th>
-				<th>Price</th>
-				<th>Total Price</th>
-				<th>Remarks</th>
-				<th>Status</th>
-			</tr>
+            <tr>
+                <th>Product ID</th>
+                <th>AWB Number</th>
+                <th>Customer Name</th>
+                <th>Hub</th>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>Seller</th>
+                <th>Weight</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Date/Time</th>
+                <th>Status</th>
+            </tr>
         </thead>
 <?php
  if ($result->num_rows > 0) {
@@ -267,13 +268,14 @@ if (isset($_POST['upload_btn'])) {
             <td>" . $row["product_id"]. "</td>
             <td>" . $row["awbnumber"]. "</td>
             <td>" . $row["customer_name"]. "</td>
+            <td>" . $row["hub"]. "</td>
             <td>" . $row["address"]. "</td>
-            <td>" . $row["order_id"]. "</td>
-            <td>" . $row["order_description"]. "</td>
-            <td>" . $row["quantity"]. "</td>
+            <td>" . $row["contact"]. "</td>
+            <td>" . $row["seller"]. "</td>
+            <td>" . $row["weight"]. "</td>
+            <td>" . $row["size"]. "</td>
             <td>" . $row["price"]. "</td>
-            <td>" . $row["total_price"]. "</td>
-            <td>" . $row["remarks"]. "</td>
+            <td>" . $row["datetime"]. "</td>
             <td>
                 <form method='post' action='manifest.php'>
                     <input type='hidden' name='id' value='" . $row["id"] . "'>
@@ -291,7 +293,7 @@ if (isset($_POST['upload_btn'])) {
 }
 $conn->close();
 ?>
-	</div>
+    </div>
 </section>
 
 </body>

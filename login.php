@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: admin.php');
             exit();
         } elseif ($user['role'] == 'Rider') {
-            header('Location: batangas_rider.php');
+            header('Location: rider_profile.php');
             exit();
         } elseif ($user['hub'] == 'Batangas') {
             header('Location: batangashub.php');
