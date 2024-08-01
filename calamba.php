@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) {
     }
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, contact, seller, weight, size, price, datetime, status FROM manifests";
+$sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -101,7 +101,7 @@ $result = $conn->query($sql);
 <?php
 // Function to get parcel count for a given location
 function getParcelCount($conn, $location) {
-    $query = $conn->prepare("SELECT COUNT(*) as total_parcels FROM manifests WHERE address LIKE ?");
+    $query = $conn->prepare("SELECT COUNT(*) as total_parcels FROM manifests WHERE hub LIKE ?");
     $location_param = "%$location%";
     $query->bind_param("s", $location_param);
     $query->execute();
@@ -144,12 +144,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $search_query = "";
 if ($search) {
     $search = $conn->real_escape_string($search);
-    $search_query = "WHERE customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%' AND address LIKE 'Calamba%'";
+    $search_query = "WHERE customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%' AND hub LIKE 'Calamba%'";
 } else {
-    $search_query = "WHERE address LIKE 'Calamba%'";
+    $search_query = "WHERE hub LIKE 'Calamba%'";
 }
 
-$sql = "SELECT id, product_id, awbnumber, customer_name, address, contact, seller, weight, size, price, datetime, status FROM manifests $search_query";
+$sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests $search_query";
 $result = $conn->query($sql);
 ?>
 <body>
@@ -207,6 +207,7 @@ $result = $conn->query($sql);
             <th>Product ID</th>
             <th>AWB Number</th>
             <th>Customer Name</th>
+            <th>Hub</th>
             <th>Address</th>
             <th>Contact</th>
             <th>Seller</th>
@@ -224,6 +225,7 @@ $result = $conn->query($sql);
                             <td>" . $row["product_id"]. "</td>
                             <td>" . $row["awbnumber"]. "</td>
                             <td>" . $row["customer_name"]. "</td>
+                            <td>" . $row["hub"]. "</td>
                             <td>" . $row["address"]. "</td>
                             <td>" . $row["contact"]. "</td>
                             <td>" . $row["seller"]. "</td>
