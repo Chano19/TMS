@@ -233,14 +233,14 @@ body {
             <form method="POST" action="login.php" class="d-flex flex-column"><br>
                 <div class="h3 text-center fw-bold text-dark">Login</div><br>
                 <div class="d-flex align-items-center input-field my-3 mb-4">
-                    <span class="far fa-user p-2"></span>
+                    <span class="far fa-user p-2 text-dark"></span>
                     <input type="text" placeholder="Email" required class="form-control fw-light" id="email" name="email">
                 </div><br>
                 <div class="d-flex align-items-center input-field mb-4">
-                    <span class="fas fa-lock p-2"></span>
+                    <span class="fas fa-lock p-2 text-dark"></span>
                     <input type="password" placeholder="Password" required class="form-control fw-light" id="password" name="password">
                     <button class="btn" onclick="showPassword()">
-                        <span class="fas fa-eye-slash"></span>
+                        <span class="fas fa-eye-slash text-dark"></span>
                     </button>
                 </div>
                 <div class="my-3">
