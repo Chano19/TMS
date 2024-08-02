@@ -90,6 +90,7 @@ if (!isset($_SESSION['email']) || $_SESSION['hub'] != 'Batangas' || $_SESSION['r
     <a href="batangas_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a href="batangas_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
     <a href="batangas_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+    <a href="batangas_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 

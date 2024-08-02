@@ -120,7 +120,7 @@ $conn->close();
 	<h3 class="text-center">Welcome to Rider Hub</h3>
     <a class="active" href="rider_profile.php">Profile</a>
     <a href="batangas_rider.php">Order</a>
-	<a href="reportpage.php">Report</a>
+	  <a href="rider_remittance.php">Remittance</a>
     <a href="logout.php">Logout</a>
   </div>
   

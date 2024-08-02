@@ -12,15 +12,21 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM tblcontact";
+$sql = "SELECT amount, datetime FROM remittance WHERE hub LIKE 'Batangas%'";
 $result = $conn->query($sql);
+
+$total_sql = "SELECT SUM(amount) AS total_amount FROM remittance";
+$total_result = $conn->query($total_sql);
+$total_amount = $total_result->fetch_assoc()['total_amount'];
+
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manifest</title>
+  <title>CRC App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -29,12 +35,12 @@ $result = $conn->query($sql);
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <style>
     body {
-        background-color: white;
-        background-image: url("images/crcbg.jpg");
-        background-repeat: no-repeat;
-        background-size: auto-sized;
+      background-color: white;
+      background-image: url("images/crcbg.jpg");
+      background-repeat: no-repeat;
+      background-size: 1800px 900px;
       background-attachment: fixed;
-      }
+    }
     .sidebar {
       margin: 0;
       padding: 0;
@@ -58,10 +64,9 @@ $result = $conn->query($sql);
       background-color: #555;
       color: white;
     }
-    div.content {
+    .content {
       margin-left: 200px;
-      padding: 1px 16px;
-      height: 1000px;
+      padding: 16px;
     }
     @media screen and (max-width: 700px) {
       .sidebar {
@@ -70,7 +75,7 @@ $result = $conn->query($sql);
         position: relative;
       }
       .sidebar a {float: left;}
-      div.content {margin-left: 0;}
+      .content {margin-left: 0;}
     }
     @media screen and (max-width: 400px) {
       .sidebar a {
@@ -78,51 +83,81 @@ $result = $conn->query($sql);
         float: none;
       }
     }
-    .table{
-        background-color: rgba(255, 255, 255, 0.9);
+    .card {
+      margin: 20px 0;
+      padding: 30px;
+      border: 1px solid #ddd3;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.9);
+      font-family: "Times New Roman", Times, serif;
+      margin-top: 30px;
+    }
+    .ords {
+      background-color: rgba(255, 255, 255, 0.9);
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .table{
+	  margin-left: 80px;
+      margin-top: 20px;
+    }
+    h4{
+      margin-left: 230px;
     }
   </style>
 </head>
 <body>
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
-    <h3 class="text-center">Welcome to Admin</h3>
+    <h5 class="text-center mt-2">Welcome to <br> Makati Hub</h5>
     <a href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
     <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
     <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
-    <a class="active" href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
+	<a class="active" href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
+    <a href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
+
   <div class="content">
-      <div class="container">
-        </form>
-
-
-      <table class="table table-hover mt-3 border border-1">
-        <thead class="bg-info">
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Message</th>
-          </tr>
-        </thead>
-          <?php
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr>
-                            <td>" . $row["name"]. "</td>
-                            <td>" . $row["email"]. "</td>
-                            <td>" . $row["message"]. "</td>
-                        </tr>";
-                }
-    } 
-    ?>
-    </form>
+    <div class="container">
+      <div class="card">
+        <div class="row">
+          <div class="col-md-10">
+            <h2>Report</h2>
+            </form>
+              <table class="table table-hover mt-3 border border-1">
+                <thead class="bg-info">
+                  <tr>
+                    <th>Hub</th>
+                    <th>Amount</th>
+                    <th>Date/Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            echo "<tr>
+                                    <td>" . $row["hub"]. "</td>
+                                    <td>" . $row["amount"]. "</td>
+                                    <td>" . $row["datetime"]. "</td>
+                                </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='3'>No records found</td></tr>";
+                    }
+                  ?>
+                </tbody>
+            </table>
+			<div>
+				<h4>Total: <?php echo $total_amount; ?></h4>
+			</div>
+          </div>
+        </div>
       </div>
+        </div>
   </div>
 </body>
 </html>

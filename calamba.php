@@ -160,7 +160,7 @@ $result = $conn->query($sql);
     <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
     <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a class="active" href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
-    <a href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
+    <a href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 <div class="content"><br><br>

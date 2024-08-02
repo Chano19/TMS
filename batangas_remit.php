@@ -1,9 +1,32 @@
+<?php
+$servername = "localhost";
+$email = "u320585682_TMS";
+$password = "Crctracking3";
+$dbname = "u320585682_TMS";
+
+// Create connection
+$conn = new mysqli($servername, $email, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$sql = "SELECT rider_name, amount, datetime FROM remittance WHERE hub LIKE 'Batangas%'";
+$result = $conn->query($sql);
+
+$total_sql = "SELECT SUM(amount) AS total_amount FROM remittance";
+$total_result = $conn->query($total_sql);
+$total_amount = $total_result->fetch_assoc()['total_amount'];
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRC App</title>
+  <title>CRC Tracking App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -61,8 +84,8 @@
       }
     }
     .card {
-      margin: 20px 0;
-      padding: 30px;
+      margin: 17px 0;
+      padding: 20px;
       border: 1px solid #ddd3;
       border-radius: 5px;
       background-color: rgba(255, 255, 255, 0.9);
@@ -75,30 +98,25 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    .report{
-      border-radius: 20px;
-    }
-    .send{
-      margin-top: 3px;
-      margin-left: 750px;
-    }
     .table{
+	  margin-left: 80px;
       margin-top: 20px;
     }
     h4{
-      text-align: left;
-      margin-left: 900px;
+      margin-left: 370px;
     }
   </style>
 </head>
 <body>
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
-    <h3 class="text-center">Welcome to Rider Hub</h3>
-    <a href="rider_profile.php">Profile</a>
-    <a href="batangas_rider.php">Order</a>
-	<a class="active" href="reportpage.php">Report</a>
-    <a href="logout.php">Logout</a>
+    <h5 class="text-center mt-2">Welcome to <br> Batangas Hub</h5>
+    <a href="batangashub.php"><i class="fas fa-home"></i> Home</a>
+    <a href="batangas_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <a href="batangas_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
+    <a href="batangas_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+	<a class="active mt-3" href="batangas_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 
   <div class="content">
@@ -107,11 +125,35 @@
         <div class="row">
           <div class="col-md-10">
             <h2>Report</h2>
-            <textarea class="report" name="comments" rows="5" cols="100" placeholder="Write your comments here..." maxlength="600"></textarea>
+            </form>
+              <table class="table table-hover mt-3 border border-1">
+                <thead class="bg-info">
+                  <tr>
+                    <th>Rider Name</th>
+                    <th>Amount</th>
+                    <th>Date/Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            echo "<tr>
+                                    <td>" . $row["rider_name"]. "</td>
+                                    <td>" . $row["amount"]. "</td>
+                                    <td>" . $row["datetime"]. "</td>
+                                </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='4'>No records found</td></tr>";
+                    }
+                  ?>
+                </tbody>
+            </table>
+			 <div>
+				<h4>Total: <?php echo $total_amount; ?></h4>
+			</div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <button class="send">Report</button>
         </div>
       </div>
         </div>
