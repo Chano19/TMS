@@ -144,7 +144,7 @@ $conn->close();
     <h3 class="text-center">Welcome to Rider Hub</h3>
     <a href="rider_profile.php">Profile</a>
     <a href="rider_batangas.php">Order</a>
-    <a class="active" href="remittance.php">Remittance</a>
+    <a class="active" href="rider_remittance.php">Remittance</a>
     <a href="logout.php">Logout</a>
   </div>
 

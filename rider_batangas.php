@@ -188,7 +188,7 @@ if (!$result) {
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
     <h3 class="text-center">Welcome to Rider Hub</h3>
     <a href="rider_profile.php">Profile</a>
-    <a class="active" href="batangas_rider.php">Order</a>
+    <a class="active" href="rider_batangas.php">Order</a>
 	  <a href="rider_remittance.php">Remittance</a>
     <a href="logout.php">Logout</a>
   </div>
