@@ -13,11 +13,11 @@ if ($conn->connect_error) {
 }
 
 // SQL query to get records based on specific conditions
-$sql = "SELECT id, awbnumber, price, datetime, status FROM manifests WHERE hub='Batangas' AND status='Delivered'";
+$sql = "SELECT id, awbnumber, price, datetime, status FROM manifests WHERE hub='Batangas' && status='Delivered'";
 $result = $conn->query($sql);
 
 // Calculate total amount based on the same conditions
-$total_sql = "SELECT SUM(price) AS total_amount FROM manifests WHERE hub='Batangas' AND status='Delivered'";
+$total_sql = "SELECT SUM(price) AS total_amount FROM manifests WHERE hub='Batangas' && status='Delivered'";
 $total_result = $conn->query($total_sql);
 $total_amount = $total_result->fetch_assoc()['total_amount'];
 
