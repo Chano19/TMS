@@ -26,7 +26,7 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRC App</title>
+  <title>CRC Tracking App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -115,8 +115,7 @@ $conn->close();
     <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
     <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
-	<a class="active" href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
-    <a href="cantactadmin.php"><i class="fas fa-address-book"></i> Message</a>
+	  <a class="active" href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 
