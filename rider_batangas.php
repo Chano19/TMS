@@ -241,20 +241,20 @@ if (!$result) {
 				<td>" . $row["datetime"]. "</td>
                   <td>
                     <form method='post' action='rider_batangas.php' enctype='multipart/form-data'>
-                      <input type='hidden' name='id' value='" . $row["id"] . "'>
-                      <select name='status' onchange='handleStatusChange(this)'>
-                        <option value='Delivered' " . ($row["status"] == 'Delivered' ? 'selected' : '') . ">Delivered</option>
-                        <option value='Cancel - First Attempt' " . ($row["status"] == 'Cancel - First Attempt' ? 'selected' : '') . ">Cancel - First Attempt</option>
-                        <option value='Cancel - Second Attempt' " . ($row["status"] == 'Cancel - Second Attempt' ? 'selected' : '') . ">Cancel - Second Attempt</option>
-                        <option value='Cancel - Third Attempt' " . ($row["status"] == 'Cancel - Third Attempt' ? 'selected' : '') . ">Cancel - Third Attempt</option>
-                        <option value='Return' " . ($row["status"] == 'Return' ? 'selected' : '') . ">Return</option>
-                      </select>
-                      <div id='return-reason'>
-                        <input type='text' name='return_reason' placeholder='Reason for return'>
-                      </div>
-                      <input type='file' name='image'>
-                      <input type='submit' class='bg-success' name='update_status' value='Update'>
-                    </form>
+                <input type='hidden' name='id' value='" . $row["id"] . "'>
+                <select name='status' onchange='handleStatusChange(this)' data-current-status='" . $row["status"] . "' class='status-dropdown'>
+                  <option value='Delivered' " . ($row["status"] == 'Delivered' ? 'selected' : '') . ">Delivered</option>
+                  <option value='Cancel - First Attempt' " . ($row["status"] == 'Cancel - First Attempt' ? 'selected' : '') . ">Cancel - First Attempt</option>
+                  <option value='Cancel - Second Attempt' " . ($row["status"] == 'Cancel - Second Attempt' ? 'selected' : '') . ">Cancel - Second Attempt</option>
+                  <option value='Cancel - Third Attempt' " . ($row["status"] == 'Cancel - Third Attempt' ? 'selected' : '') . ">Cancel - Third Attempt</option>
+                  <option value='Return' " . ($row["status"] == 'Return' ? 'selected' : '') . ">Return</option>
+                </select>
+                <div id='return-reason'>
+                  <input type='text' name='return_reason' placeholder='Reason for return'>
+                </div>
+                  <input type='file' name='image'>
+                  <input type='submit' class='bg-success' name='update_status' value='Update'>
+              </form>
                   </td>
                   <td>
                     <img src='" . $image_path . "' class='img-preview' alt='Parcel Image'>
@@ -278,3 +278,40 @@ if (!$result) {
   </section>
 </body>
 </html>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all status dropdowns
+        const statusDropdowns = document.querySelectorAll('.status-dropdown');
+
+        statusDropdowns.forEach(function (dropdown) {
+            const currentStatus = dropdown.getAttribute('data-current-status');
+
+            // Disable options based on the current status
+            if (currentStatus === 'Delivered') {
+                dropdown.querySelector('option[value="Cancel - First Attempt"]').disabled = true;
+                dropdown.querySelector('option[value="Cancel - Second Attempt"]').disabled = true;
+                dropdown.querySelector('option[value="Cancel - Third Attempt"]').disabled = true;
+                dropdown.querySelector('option[value="Return"]').disabled = true;
+            } else if (currentStatus === 'Return') {
+                dropdown.querySelector('option[value="Delivered"]').disabled = true;
+                dropdown.querySelector('option[value="Cancel - First Attempt"]').disabled = true;
+                dropdown.querySelector('option[value="Cancel - Second Attempt"]').disabled = true;
+                dropdown.querySelector('option[value="Cancel - Third Attempt"]').disabled = true;
+            } else if (currentStatus === 'Cancel - Second Attempt') {
+                dropdown.querySelector('option[value="Cancel - First Attempt"]').disabled = true;
+            } else if (currentStatus === 'Cancel - Third Attempt') {
+                dropdown.querySelector('option[value="Cancel - First Attempt"]').disabled = true;
+                dropdown.querySelector('option[value="Cancel - Second Attempt"]').disabled = true;
+            }
+        });
+    });
+
+    function handleStatusChange(selectElement) {
+        var reasonField = selectElement.parentElement.querySelector('#return-reason');
+        if (selectElement.value === 'Return') {
+            reasonField.style.display = 'block';
+        } else {
+            reasonField.style.display = 'none';
+        }
+    }
+</script>

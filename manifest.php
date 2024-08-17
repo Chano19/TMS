@@ -279,9 +279,14 @@ if (isset($_POST['upload_btn'])) {
             <td>
                 <form method='post' action='manifest.php'>
                     <input type='hidden' name='id' value='" . $row["id"] . "'>
-                    <select name='status'>
-                        <option value='Arrived at Warehouse' " . ($row["status"] == 'Arrived at Warehouse' ? 'selected' : '') . ">Arrived at Warehouse</option>
-                        <option value='In-transit to Hub' " . ($row["status"] == 'In-transit to Hub' ? 'selected' : '') . ">In-transit to Hub</option>
+                    <select name='status'>";
+                                    
+        // Only display 'Arrived at HUB' option if the current status is not 'Out for Delivery'
+        if ($row["status"] != 'In-transit to Hub') {
+            echo "<option value='Arrived at Warehouse' " . ($row["status"] == 'Arrived at Warehouse' ? 'selected' : '') . ">Arrived at Warehouse</option>";
+        }
+            echo "<option value='In-transit to Hub' " . ($row["status"] == 'In-transit to Hub' ? 'selected' : '') . ">In-transit to Hub</option>
+
                     </select>
                     <input type='submit' class='bg-success' name='update_status' value='Update'>
                 </form>

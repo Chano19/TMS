@@ -185,9 +185,14 @@ $result = $conn->query($sql);
                             <td>
                                 <form method='post' action='batangas_manifest.php'>
                                     <input type='hidden' name='id' value='" . $row["id"] . "'>
-                                    <select name='status'>
-                                        <option value='Arrived at HUB' " . ($row["status"] == 'Arrived at HUB' ? 'selected' : '') . ">Arrived at HUB</option>
-                                        <option value='Out for Delivery' " . ($row["status"] == 'Out for Delivery' ? 'selected' : '') . ">Out for Delivery</option>
+                                    <select name='status'>";
+                                    
+                    // Only display 'Arrived at HUB' option if the current status is not 'Out for Delivery'
+                    if ($row["status"] != 'Out for Delivery') {
+                        echo "<option value='Arrived at HUB' " . ($row["status"] == 'Arrived at HUB' ? 'selected' : '') . ">Arrived at HUB</option>";
+                    }
+                        echo "<option value='Out for Delivery' " . ($row["status"] == 'Out for Delivery' ? 'selected' : '') . ">Out for Delivery</option>
+
                                     </select>
                                     <input type='submit' name='update_status' value='Update'>
                                 </form>
