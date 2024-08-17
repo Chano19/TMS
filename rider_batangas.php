@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['search'])) {
         $search = $_POST['search'];
     } else {
-	$search_query = "WHERE hub='Batangas' && role='Rider'";
+	$search_query = "WHERE hub='Batangas' && role='Rider' && status='Assigned'";
 }
  
 }
@@ -85,7 +85,7 @@ if ($search) {
     $search = $conn->real_escape_string($search);
     $search_query .= " AND (customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%')";
 } else {
-	$search_query = "WHERE hub='Batangas'";
+	$search_query = "WHERE hub='Batangas' && status='Assigned'";
 }
 
 
