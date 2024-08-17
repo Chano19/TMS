@@ -211,7 +211,7 @@ $result = $conn->query($sql);
 
       <!-- Modal body -->
       <div class="modal-body">
-        <form method="POST" action="dashboard.php">
+        <form method="POST" action="batangas_assign.php">
           <input type="hidden" id="parcelId" name="parcel_id">
           <table class="table table-hover mt-2 border border-1 text-center">
             <thead class="bg-info">
