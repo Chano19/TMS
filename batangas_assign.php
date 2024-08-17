@@ -100,9 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rider_result = $conn->query($rider_query);
         if ($rider_result->num_rows > 0) {
             $rider_row = $rider_result->fetch_assoc();
-            $status = $rider_row['name'];
+            $rider_name = $rider_row['name'];
 
-            $assign_sql = "UPDATE manifests SET status='$status' WHERE id='$parcel_id'";
+            $assign_sql = "UPDATE manifests SET rider_name='$rider_name', status='Assigned' WHERE id='$parcel_id'";
             if ($conn->query($assign_sql) === TRUE) {
                 echo "Rider assigned successfully!";
             } else {
