@@ -1,6 +1,6 @@
 <?php
 $servername = "localhost";
-$email = "u320585682_TMS";
+$username = "u320585682_TMS";
 $password = "Crctracking3";
 $dbname = "u320585682_TMS";
 
