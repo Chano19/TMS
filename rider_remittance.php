@@ -1,44 +1,24 @@
 <?php
+session_start();
 $servername = "localhost";
 $email = "u320585682_TMS";
 $password = "Crctracking3";
 $dbname = "u320585682_TMS";
 
 // Create connection
-$conn = new mysqli($servername, $email, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$alert = false;
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $hub = $_POST['hub'];
-    $rider_name = $_POST['rider_name'];
-    $amount = $_POST['amount'];
-    $datetime = $_POST['datetime'];
-
-    // Format the datetime to be compatible with SQL TIMESTAMP
-    $datetime = date('Y-m-d H:i:s', strtotime($datetime));
-
-    $sql = "INSERT INTO remittance (hub, rider_name, amount, datetime) 
-            VALUES ('$hub', '$rider_name', '$amount', '$datetime')";
-
-    if ($conn->query($sql) === TRUE) {
-        $alert = true;
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
-
-// Fetch remittance data
-$sql = "SELECT hub, rider_name, amount, datetime FROM remittance";
+// SQL query to get records based on specific conditions
+$sql = "SELECT id, awbnumber, price, datetime, status FROM manifests WHERE hub='Batangas' AND status='Delivered'";
 $result = $conn->query($sql);
 
-// Calculate total amount
-$total_sql = "SELECT SUM(amount) AS total_amount FROM remittance";
+// Calculate total amount based on the same conditions
+$total_sql = "SELECT SUM(price) AS total_amount FROM manifests WHERE hub='Batangas' AND status='Delivered'";
 $total_result = $conn->query($total_sql);
 $total_amount = $total_result->fetch_assoc()['total_amount'];
 
@@ -49,7 +29,7 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRC Tracking App</title>
+  <title>CRC App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -153,10 +133,10 @@ $conn->close();
       <table class="table table-hover mt-3 border border-1">
         <thead class="bg-info">
           <tr>
-            <th>Hub</th>
-            <th>Rider Name</th>
+            <th>AWB Number</th>
             <th>Amount</th>
             <th>Date/Time</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -164,14 +144,14 @@ $conn->close();
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     echo "<tr>
-                            <td>" . $row["hub"]. "</td>
-                            <td>" . $row["rider_name"]. "</td>
-                            <td>" . $row["amount"]. "</td>
+                            <td>" . $row["awbnumber"]. "</td>
+                            <td>" . $row["price"]. "</td>
                             <td>" . $row["datetime"]. "</td>
+                            <td>" . $row["status"]. "</td>
                         </tr>";
                 }
             } else {
-                echo "<tr><td colspan='5'>No records found</td></tr>";
+                echo "<tr><td colspan='4'>No records found</td></tr>";
             }
           ?>
         </tbody>
@@ -179,34 +159,5 @@ $conn->close();
       <div>
             <h4>Total: <?php echo $total_amount; ?></h4>
         </div>
-      <div class="card">
-        <div class="row">
-          <div class="col-md-5">
-            <h2>Remittance Form</h2>
-            <form method="POST" action="remittance.php">
-
-                <label for="hub">Hub:</label>
-                <input type="text" id="hub" name="hub" value="Batangas" required>
-
-                <label for="rider_name">Rider Name:</label>
-                <input type="text" id="rider_name" name="rider_name" required>
-
-                <label for="amount">Amount:</label>
-                <input type="number" id="amount" name="amount" required>
-                
-                <label for="datetime">Date/Time:</label>
-                <input type="datetime-local" id="datetime" name="datetime" required>
-
-                <input type="submit" value="Submit">
-            </form>
-        </div>
-      </div>
-     </div>
-  </div>
-  <?php if ($alert): ?>
-    <script>
-      alert("New remittance entry added successfully!");
-    </script>
-  <?php endif; ?>
 </body>
 </html>

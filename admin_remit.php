@@ -5,17 +5,18 @@ $password = "Crctracking3";
 $dbname = "u320585682_TMS";
 
 // Create connection
-$conn = new mysqli($servername, $email, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-$sql = "SELECT amount, datetime FROM remittance WHERE hub LIKE 'Batangas%'";
+// SQL query to get records based on specific conditions
+$sql = "SELECT id, hub, SUM(price) AS amount, datetime FROM manifests WHERE hub='Batangas' AND status='Delivered'";
 $result = $conn->query($sql);
 
-$total_sql = "SELECT SUM(amount) AS total_amount FROM remittance";
+// Calculate total amount based on the same conditions
+$total_sql = "SELECT SUM(price) AS total_amount FROM manifests WHERE hub='Batangas' AND status='Delivered'";
 $total_result = $conn->query($total_sql);
 $total_amount = $total_result->fetch_assoc()['total_amount'];
 
@@ -26,7 +27,7 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRC Tracking App</title>
+  <title>CRC App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -99,7 +100,7 @@ $conn->close();
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     .table{
-	  margin-left: 80px;
+    margin-left: 80px;
       margin-top: 20px;
     }
     h4{
@@ -110,12 +111,12 @@ $conn->close();
 <body>
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
-    <h5 class="text-center mt-2">Welcome to <br> Makati Hub</h5>
+    <h5 class="text-center mt-2">Welcome to <br> Admin</h5>
     <a href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
     <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
     <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
-	  <a class="active" href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
+  <a class="active" href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 
@@ -150,9 +151,6 @@ $conn->close();
                   ?>
                 </tbody>
             </table>
-			<div>
-				<h4>Total: <?php echo $total_amount; ?></h4>
-			</div>
           </div>
         </div>
       </div>
