@@ -240,7 +240,7 @@ if (!$result) {
 				<td>" . $row["price"]. "</td>
 				<td>" . $row["datetime"]. "</td>
                   <td>
-                    <form method='post' action='batangas_rider.php' enctype='multipart/form-data'>
+                    <form method='post' action='rider_batangas.php' enctype='multipart/form-data'>
                       <input type='hidden' name='id' value='" . $row["id"] . "'>
                       <select name='status' onchange='handleStatusChange(this)'>
                         <option value='Delivered' " . ($row["status"] == 'Delivered' ? 'selected' : '') . ">Delivered</option>
@@ -260,7 +260,7 @@ if (!$result) {
                     <img src='" . $image_path . "' class='img-preview' alt='Parcel Image'>
                   </td>
                   <td>
-                    <form method='post' action='batangas_rider.php'>
+                    <form method='post' action='rider_batangas.php'>
                       <input type='hidden' name='id' value='" . $row["id"] . "'>
                       <input type='hidden' name='amount' value='" . $row["price"] . "'>
                       <input type='submit' class='bg-success' name='pay' value='Pay'>
