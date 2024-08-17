@@ -1,5 +1,4 @@
 <?php
-session_start();
 $servername = "localhost";
 $email = "u320585682_TMS";
 $password = "Crctracking3";
