@@ -10,7 +10,10 @@ $conn = new mysqli($servername, $email, $password, $dbname);
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+} else {
+  $search_query = "WHERE hub='Batangas' && role='Rider'";
 }
+
 $sql2 = "SELECT id, name, contact, email FROM login $search_query";
 $result2 = $conn->query($sql2);
 ?>
