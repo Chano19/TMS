@@ -208,68 +208,69 @@ if (!$result) {
         <thead class="bg-info text-center fs-6">
           <tr>
             <th>Product ID</th>
-				<th>AWB Number</th>
-				<th>Customer Name</th>
-				<th>Hub</th>
-				<th>Address</th>
-				<th>Contact</th>
-				<th>Seller</th>
-				<th>Weight</th>
-				<th>Size</th>
-				<th>Price</th>
-				<th>Date/Time</th>
-				<th>Status</th>
-				<th>Image</th>
+				    <th>AWB Number</th>
+				    <th>Customer Name</th>
+				    <th>Hub</th>
+				    <th>Address</th>
+				    <th>Contact</th>
+				    <th>Seller</th>
+				    <th>Weight</th>
+				    <th>Size</th>
+				    <th>Price</th>
+				    <th>Date/Time</th>
+				    <th>Status</th>
+				    <th>Image</th>
             <th>Payment</th>
           </tr>
         </thead>
         <?php
         if ($result && $result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $image_path = $row["image"] ? 'uploads/' . $row["image"] : 'uploads/default.png'; // Default image if none uploaded
-                echo "<tr>
-                  <td>" . $row["product_id"]. "</td>
-				<td>" . $row["awbnumber"]. "</td>
-				<td>" . $row["customer_name"]. "</td>
-				<td>" . $row["hub"]. "</td>
-				<td>" . $row["address"]. "</td>
-				<td>" . $row["contact"]. "</td>
-				<td>" . $row["seller"]. "</td>
-				<td>" . $row["weight"]. "</td>
-				<td>" . $row["size"]. "</td>
-				<td>" . $row["price"]. "</td>
-				<td>" . $row["datetime"]. "</td>
-                  <td>
-                    <form method='post' action='rider_batangas.php' enctype='multipart/form-data'>
-                <input type='hidden' name='id' value='" . $row["id"] . "'>
-                <select name='status' onchange='handleStatusChange(this)' data-current-status='" . $row["status"] . "' class='status-dropdown'>
-                  <option value='Delivered' " . ($row["status"] == 'Delivered' ? 'selected' : '') . ">Delivered</option>
-                  <option value='Cancel - First Attempt' " . ($row["status"] == 'Cancel - First Attempt' ? 'selected' : '') . ">Cancel - First Attempt</option>
-                  <option value='Cancel - Second Attempt' " . ($row["status"] == 'Cancel - Second Attempt' ? 'selected' : '') . ">Cancel - Second Attempt</option>
-                  <option value='Cancel - Third Attempt' " . ($row["status"] == 'Cancel - Third Attempt' ? 'selected' : '') . ">Cancel - Third Attempt</option>
-                  <option value='Return' " . ($row["status"] == 'Return' ? 'selected' : '') . ">Return</option>
-                </select>
-                <div id='return-reason'>
-                  <input type='text' name='return_reason' placeholder='Reason for return'>
-                </div>
-                  <input type='file' name='image'>
-                  <input type='submit' class='bg-success' name='update_status' value='Update'>
-              </form>
-                  </td>
-                  <td>
-                    <img src='" . $image_path . "' class='img-preview' alt='Parcel Image'>
-                  </td>
-                  <td>
-                    <form method='post' action='rider_batangas.php'>
-                      <input type='hidden' name='id' value='" . $row["id"] . "'>
-                      <input type='hidden' name='amount' value='" . $row["price"] . "'>
-                      <input type='submit' class='bg-success' name='pay' value='Pay'>
-                    </form>
-                  </td>
-                </tr>";
+          while($row = $result->fetch_assoc()) {
+            $image_path = $row["image"] ? 'uploads/' . $row["image"] : 'uploads/default.png'; // Default image if none uploaded
+            echo "<tr>
+              <td>" . $row["product_id"]. "</td>
+				      <td>" . $row["awbnumber"]. "</td>
+				      <td>" . $row["customer_name"]. "</td>
+				      <td>" . $row["hub"]. "</td>
+				      <td>" . $row["address"]. "</td>
+				      <td>" . $row["contact"]. "</td>
+				      <td>" . $row["seller"]. "</td>
+				      <td>" . $row["weight"]. "</td>
+				      <td>" . $row["size"]. "</td>
+				      <td>" . $row["price"]. "</td>
+				      <td>" . $row["datetime"]. "</td>
+              <td>
+                <form method='post' action='rider_batangas.php' enctype='multipart/form-data'>
+                  <input type='hidden' name='id' value='" . $row["id"] . "'>
+                  <select name='status' onchange='handleStatusChange(this)' data-current-status='" . $row["status"] . "' class='status-dropdown'>
+                    <option selected disabled>Choose...</option>
+                    <option value='Delivered' " . ($row["status"] == 'Delivered' ? 'selected' : '') . ">Delivered</option>
+                    <option value='Cancel - First Attempt' " . ($row["status"] == 'Cancel - First Attempt' ? 'selected' : '') . ">Cancel - First Attempt</option>
+                    <option value='Cancel - Second Attempt' " . ($row["status"] == 'Cancel - Second Attempt' ? 'selected' : '') . ">Cancel - Second Attempt</option>
+                    <option value='Cancel - Third Attempt' " . ($row["status"] == 'Cancel - Third Attempt' ? 'selected' : '') . ">Cancel - Third Attempt</option>
+                    <option value='Return' " . ($row["status"] == 'Return' ? 'selected' : '') . ">Return</option>
+                  </select>
+                  <div id='return-reason'>
+                    <input type='text' name='return_reason' placeholder='Reason for return'>
+                  </div>
+                    <input type='file' name='image'>
+                    <input type='submit' class='bg-success' name='update_status' value='Update'>
+                </form>
+              </td>
+              <td>
+                <img src='" . $image_path . "' class='img-preview' alt='Parcel Image'>
+              </td>
+              <td>
+                <form method='post' action='rider_batangas.php'>
+                  <input type='hidden' name='id' value='" . $row["id"] . "'>
+                  <input type='hidden' name='amount' value='" . $row["price"] . "'>
+                  <input type='submit' class='bg-success' name='pay' value='Pay'>
+                </form>
+              </td>
+            </tr>";
             }
         } else {
-            echo "<tr><td colspan='11'>No data found</td></tr>";
+          echo "<tr><td colspan='11'>No data found</td></tr>";
         }
         $conn->close();
         ?>
