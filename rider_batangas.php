@@ -85,7 +85,7 @@ if ($search) {
     $search = $conn->real_escape_string($search);
     $search_query .= " AND (customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%')";
 } else {
-	$search_query = "WHERE hub='Batangas' && status='Assigned' && status='Delivered' && status='Cancel - First Attempt' && status='Cancel - Second Attempt' && status='Cancel - Third Attempt' && status='Return'";
+	$search_query = "WHERE hub='Batangas' && status='Assigned' || status='Delivered' || status='Cancel - First Attempt' || status='Cancel - Second Attempt' || status='Cancel - Third Attempt' || status='Return'";
 }
 
 
