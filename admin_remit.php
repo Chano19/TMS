@@ -1,5 +1,3 @@
-
-hgfghh
 <?php
 $servername = "localhost";
 $username = "u320585682_TMS";
