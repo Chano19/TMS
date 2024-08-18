@@ -162,6 +162,7 @@ $result = $conn->query($sql);
     <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a class="active" href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
     <a href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
+    <a href="reportpage.php"><i class="far fa-file-alt"></i> Report</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
  
