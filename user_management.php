@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                                             </select>
                                         </div>
                                     </div><br>
-                                    <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" id="submit" name="submit" class="btn btn-primary">Submit</button>
                                 </form>
                             </div>
                         </div>
