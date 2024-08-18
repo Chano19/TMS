@@ -131,6 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                                         <div class="form-group col-md-6">
                                             <label for="email">Email</label>
                                             <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                                            <span id="emailValidationMessage"></span>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="password">Password</label>
@@ -146,6 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                                                 <option>Calamba</option>
                                                 <option>Makati</option>
                                                 <option>Pasay</option>
+                                                <option>Admin</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-6">
@@ -170,4 +172,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
 </div>
 </div>
 </body>
+<script>
+        const emailInput = document.getElementById('email');
+        const emailValidationMessage = document.getElementById('emailValidationMessage');
+        const submitButton = document.getElementById('submit');
+
+        const API_KEY = 'cac693c4613f6cae2603d6bee930d118538f17f6'; // Replace with your Hunter API key
+
+        function validateEmailWithHunter(email) {
+            fetch(`https://api.hunter.io/v2/email-verifier?email=${email}&api_key=${API_KEY}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.data.result === 'deliverable') {
+                        emailValidationMessage.textContent = '';
+                        submitButton.disabled = false;
+                    } else {
+                        emailValidationMessage.textContent = 'Invalid email address.';
+                        submitButton.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    emailValidationMessage.textContent = 'Error validating email.';
+                    submitButton.disabled = true;
+                });
+        }
+
+        emailInput.addEventListener('input', () => {
+            validateEmailWithHunter(emailInput.value);
+        });
+</script>
 </html>
