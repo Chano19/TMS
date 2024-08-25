@@ -114,6 +114,7 @@ $conn->close();
     <h5 class="text-center mt-2">Welcome to <br> Admin</h5>
     <a href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
     <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
+    <a href="user_list.php"><i class="fas fa-list"></i> User List</a>
     <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
     <a class="active" href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>

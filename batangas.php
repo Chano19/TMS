@@ -159,6 +159,7 @@ $result = $conn->query($sql);
     <h3 class="text-center">Welcome to Admin</h3>
     <a href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
     <a href="user_management.php"><i class="fas fa-users"></i> User Management</a>
+    <a href="user_list.php"><i class="fas fa-list"></i> User List</a>
     <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a class="active" href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
     <a href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>

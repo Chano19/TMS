@@ -95,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     <h3 class="text-center">Welcome to Admin</h3>
     <a href="admin.php"><i class="fas fa-home"></i> Dashboard</a>
     <a class="active" href="user_management.php"><i class="fas fa-users"></i> User Management</a>
+    <a href="user_list.php"><i class="fas fa-list"></i> User List</a>
     <a href="manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a href="hub_management.php"><i class="fas fa-list"></i> HUB Management</a>
     <a href="admin_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
@@ -178,28 +179,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
         const emailValidationMessage = document.getElementById('emailValidationMessage');
         const submitButton = document.getElementById('submit');
 
-        const API_KEY = 'cac693c4613f6cae2603d6bee930d118538f17f6'; // Replace with your Hunter API key
-
-        function validateEmailWithHunter(email) {
-            fetch(`https://api.hunter.io/v2/email-verifier?email=${email}&api_key=${API_KEY}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.data.result === 'deliverable') {
-                        emailValidationMessage.textContent = '';
-                        submitButton.disabled = false;
+        function validateEmailWithAPI(email) {
+            const url = `https://emailvalidation.abstractapi.com/v1/?api_key=d3eec398746949d1b260717cfd89fc21&email=${encodeURIComponent(email)}`;
+            
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() {
+                if (xmlHttp.readyState === 4) {
+                    if (xmlHttp.status === 200) {
+                        const response = JSON.parse(xmlHttp.responseText);
+                        if (response.deliverability === 'DELIVERABLE') {
+                            emailValidationMessage.textContent = '';
+                            submitButton.disabled = false;
+                        } else {
+                            emailValidationMessage.textContent = 'Invalid email address.';
+                            submitButton.disabled = true;
+                        }
                     } else {
-                        emailValidationMessage.textContent = 'Invalid email address.';
+                        emailValidationMessage.textContent = 'Error validating email.';
                         submitButton.disabled = true;
                     }
-                })
-                .catch(error => {
-                    emailValidationMessage.textContent = 'Error validating email.';
-                    submitButton.disabled = true;
-                });
+                }
+            };
+            xmlHttp.open("GET", url, true);
+            xmlHttp.send(null);
         }
 
         emailInput.addEventListener('input', () => {
-            validateEmailWithHunter(emailInput.value);
+            validateEmailWithAPI(emailInput.value);
         });
 </script>
 </html>
