@@ -117,6 +117,7 @@ $conn->close();
     <a href="makati_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a href="makati_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
     <a class="active" href="makati_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+    <a href="makati_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
   

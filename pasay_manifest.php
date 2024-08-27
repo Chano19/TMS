@@ -122,7 +122,7 @@ if ($search) {
     $search = $conn->real_escape_string($search);
     $search_query = "WHERE customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%'";
 } else {
-    $search_query = "WHERE hub LIKE 'Pasay'";
+    $search_query = "WHERE hub LIKE ''Pasay'";
 }
 
 $sql = "SELECT id, product_id, awbnumber, customer_name, hub, address, contact, seller, weight, size, price, datetime, status FROM manifests $search_query";
@@ -132,10 +132,11 @@ $result = $conn->query($sql);
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
     <h5 class="text-center mt-2">Welcome to <br> Pasay Hub</h5>
-    <a class="mt-3" href="pasayhub.php"><i class="fas fa-home"></i> Home</a>
-    <a class="active" href="pasay_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
-    <a href="pasay_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
-    <a href="pasay_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+    <a class="mt-3" href="'pasayhub.php"><i class="fas fa-home"></i> Home</a>
+    <a class="active" href="'pasay_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <a href="'pasay_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
+    <a href="'pasay_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+    <a href="'pasay_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
   <div class="content">
@@ -143,7 +144,7 @@ $result = $conn->query($sql);
     <form action="" method="POST">
 
         <!-- Search Form -->
-<form method="post" action="pasay_manifest.php">
+<form method="post" action="'pasay_manifest.php">
     <input type="text" name="search" value="<?php echo htmlspecialchars($search);?>" placeholder="Search...">
     <input type="submit" name="search_btn" value="Search">
 </form>
@@ -184,9 +185,14 @@ $result = $conn->query($sql);
                             <td>
                                 <form method='post' action='pasay_manifest.php'>
                                     <input type='hidden' name='id' value='" . $row["id"] . "'>
-                                    <select name='status'>
-                                        <option value='Arrived at HUB' " . ($row["status"] == 'Arrived at HUB' ? 'selected' : '') . ">Arrived at HUB</option>
-                                        <option value='Out for Delivery' " . ($row["status"] == 'Out for Delivery' ? 'selected' : '') . ">Out for Delivery</option>
+                                    <select name='status'>";
+                                    
+                    // Only display 'Arrived at HUB' option if the current status is not 'Out for Delivery'
+                    if ($row["status"] != 'Out for Delivery') {
+                        echo "<option value='Arrived at HUB' " . ($row["status"] == 'Arrived at HUB' ? 'selected' : '') . ">Arrived at HUB</option>";
+                    }
+                        echo "<option value='Out for Delivery' " . ($row["status"] == 'Out for Delivery' ? 'selected' : '') . ">Out for Delivery</option>
+
                                     </select>
                                     <input type='submit' name='update_status' value='Update'>
                                 </form>

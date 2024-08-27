@@ -13,6 +13,7 @@ if ($conn->connect_error) {
 } else {
   $search_query = "WHERE hub='Calamba' && role='Rider'";
 }
+
 $sql2 = "SELECT id, name, contact, email FROM login $search_query";
 $result2 = $conn->query($sql2);
 ?>
@@ -99,9 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rider_result = $conn->query($rider_query);
         if ($rider_result->num_rows > 0) {
             $rider_row = $rider_result->fetch_assoc();
-            $status = $rider_row['name'];
+            $rider_name = $rider_row['name'];
 
-            $assign_sql = "UPDATE manifests SET status='$status' WHERE id='$parcel_id'";
+            $assign_sql = "UPDATE manifests SET rider_name='$rider_name', status='Assigned' WHERE id='$parcel_id'";
             if ($conn->query($assign_sql) === TRUE) {
                 echo "Rider assigned successfully!";
             } else {
@@ -131,11 +132,12 @@ $result = $conn->query($sql);
 <body>
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
-    <h5 class="text-center mt-2">Welcome to <br> Batangas Hub</h5>
-    <a class="mt-3" href="batangashub.php"><i class="fas fa-home"></i> Home</a>
-    <a href="batangas_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <h5 class="text-center mt-2">Welcome to <br> Calamba Hub</h5>
+    <a class="mt-3" href="calambahub.php"><i class="fas fa-home"></i> Home</a>
+    <a href="calamba_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a class="active" href="calamba_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
-    <a href="batangas_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+    <a href="calamba_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+    <a href="calamba_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
   <div class="content">
@@ -209,7 +211,7 @@ $result = $conn->query($sql);
 
       <!-- Modal body -->
       <div class="modal-body">
-        <form method="POST" action="dashboard.php">
+        <form method="POST" action="calamba_assign.php">
           <input type="hidden" id="parcelId" name="parcel_id">
           <table class="table table-hover mt-2 border border-1 text-center">
             <thead class="bg-info">

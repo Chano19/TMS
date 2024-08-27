@@ -4,7 +4,6 @@ if (!isset($_SESSION['email']) || $_SESSION['hub'] != 'Calamba' || $_SESSION['ro
     header('Location: loginpage.php');
     exit();
 }
-
 $servername = "localhost";
 $email = "u320585682_TMS";
 $password = "Crctracking3";
@@ -134,6 +133,7 @@ $result = $conn->query($sql);
     <a href="calamba_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a href="calamba_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
     <a href="calamba_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+    <a href="calamba_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 

@@ -1,10 +1,4 @@
 <?php
-session_start();
-if (!isset($_SESSION['email']) || $_SESSION['hub'] != 'Calamba' || $_SESSION['role'] != 'Staff') {
-    header('Location: loginpage.php');
-    exit();
-}
-
 $servername = "localhost";
 $email = "u320585682_TMS";
 $password = "Crctracking3";
@@ -17,13 +11,21 @@ $conn = new mysqli($servername, $email, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// SQL query to get records based on specific conditions
+$sql = "SELECT login.id, login.name, SUM(manifests.price) AS amount, manifests.datetime 
+FROM login INNER JOIN manifests ON login.name = manifests.rider_name WHERE manifests.hub='Calamba' AND manifests.status='Delivered';";
+
+$result = $conn->query($sql);
+
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRC Tracking App</title>
+  <title>CRC App</title>
   <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.min.css">
   <script src="bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -35,7 +37,7 @@ if ($conn->connect_error) {
       background-color: white;
       background-image: url("images/crcbg.jpg");
       background-repeat: no-repeat;
-      background-size: auto-sized;
+      background-size: 1800px 900px;
       background-attachment: fixed;
     }
     .sidebar {
@@ -81,113 +83,77 @@ if ($conn->connect_error) {
       }
     }
     .card {
-      margin: 20px 0;
-      padding: 30px;
+      margin: 17px 0;
+      padding: 20px;
       border: 1px solid #ddd3;
       border-radius: 5px;
       background-color: rgba(255, 255, 255, 0.9);
+      font-family: "Times New Roman", Times, serif;
+      margin-top: 30px;
     }
-    .ords, .rides {
+    .ords {
       background-color: rgba(255, 255, 255, 0.9);
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+    .table{
+      margin-left: 80px;
+      margin-top: 20px;
+    }
+    h4{
+      margin-left: 370px;
+    }
   </style>
 </head>
-<?php
-$search = "";
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['update_status'])) {
-        $id = $_POST['id'];
-        $new_status = $_POST['status'];
-
-        $update_sql = "UPDATE manifests SET status='$new_status' WHERE id=$id";
-        if ($conn->query($update_sql) === TRUE) {
-            echo "";
-        } else {
-            echo "Error updating record: " . $conn->error;
-        }
-    }
-
-    if (isset($_POST['search'])) {
-        $search = $_POST['search'];
-    }
-}
-
-$search_query = "";
-if ($search) {
-    $search = $conn->real_escape_string($search);
-    $search_query = "WHERE customer_name LIKE '%$search%' OR order_id LIKE '%$search%' OR product_id LIKE '%$search%'";
-} else {
-  $search_query = "WHERE hub LIKE 'Calamba' && role='Rider'";
-}
-
-$sql = "SELECT name, address, contact, email FROM login $search_query";
-$result = $conn->query($sql);
-?>
 <body>
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
     <h5 class="text-center mt-2">Welcome to <br> Calamba Hub</h5>
-    <a class="active mt-3" href="calambahub.php"><i class="fas fa-home"></i> Home</a>
+    <a href="calambahub.php"><i class="fas fa-home"></i> Home</a>
     <a href="calamba_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
     <a href="calamba_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
     <a href="calamba_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
-    <a href="calamba_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
+    <a class="active mt-3" href="calamba_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 
-<div class="content">
-  <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card">
-            <button type="button" class="ords btn btn-info" onclick="location.href='calambahuborders.php'">
-              <i class="fas fa-box"></i> ORDERS
-            </button>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card">
-            <button type="button" class="rides btn btn-info active" onclick="location.href='calambarider.php'">
-              <i class="fas fa-motorcycle"></i> RIDER
-            </button>
+  <div class="content">
+    <div class="container">
+      <div class="card">
+        <div class="row">
+          <div class="col-md-10">
+            <h2>Report</h2>
+            <table class="table table-hover mt-3 border border-1">
+                <thead class="bg-info">
+                  <tr>
+                    <th>Rider Id</th>
+                    <th>Rider Name</th>
+                    <th>Amount</th>
+                    <th>Date/Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            echo "<tr>
+                                    <td>" . $row["id"]. "</td>
+                                    <td>" . $row["name"]. "</td>
+                                    <td>" . $row["amount"]. "</td>
+                                    <td>" . $row["datetime"]. "</td>
+                                </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='4'>No records found</td></tr>";
+                    }
+                  ?>
+                </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
-  
-   <h2 class="text-center p-5">List of Rider</h2>
-    <form action="" method="POST">
-
-
-      <table class="table table-hover mt-3 border border-1">
-        <thead class="bg-info">
-          <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Contact Number</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-          <?php
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr>
-                            <td>" . $row["name"]. "</td>
-                            <td>" . $row["address"]. "</td>
-                            <td>" . $row["contact"]. "</td>
-                            <td>" . $row["email"]. "</td>
-                        </tr>";
-                }
-    } else {
-        echo "<tr><td colspan='13'>No data found</td></tr>";
-    }
-    $conn->close();
-    ?>
-    </form>
-</div>
-  
+  </div>
 </body>
 </html>

@@ -134,7 +134,6 @@ $result = $conn->query($sql);
     <a href="batangas_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
     <a href="batangas_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
     <a href="batangas_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
-    <a href="reportpage.php"><i class="far fa-file-alt"></i> Report</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 

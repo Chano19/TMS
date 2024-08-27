@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 
 // SQL query to get records based on specific conditions
 $sql = "SELECT login.id, login.name, SUM(manifests.price) AS amount, manifests.datetime 
-FROM login INNER JOIN manifests ON login.name = manifests.rider_name WHERE manifests.hub='Batangas' AND manifests.status='Delivered';";
+FROM login INNER JOIN manifests ON login.name = manifests.rider_name WHERE manifests.hub='Makati' AND manifests.status='Delivered';";
 
 $result = $conn->query($sql);
 
@@ -109,12 +109,12 @@ $conn->close();
 <body>
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
-    <h5 class="text-center mt-2">Welcome to <br> Batangas Hub</h5>
-    <a href="batangashub.php"><i class="fas fa-home"></i> Home</a>
-    <a href="batangas_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
-    <a href="batangas_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
-    <a href="batangas_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
-    <a class="active mt-3" href="batangas_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
+    <h5 class="text-center mt-2">Welcome to <br> Makati Hub</h5>
+    <a href="makatihub.php"><i class="fas fa-home"></i> Home</a>
+    <a href="makati_manifest.php"><i class="fas fa-file-upload"></i> Manifest</a>
+    <a href="makati_assign.php"><i class="fas fa-user-cog"></i> Assign Riders</a>
+    <a href="makati_profile.php"><i class="fas fa-user"></i> Profile Staff</a>
+    <a class="active mt-3" href="makati_remit.php"><i class="fas fa-user-cog"></i> Remittance</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 
