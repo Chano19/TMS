@@ -184,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
             
             const xmlHttp = new XMLHttpRequest();
             xmlHttp.onreadystatechange = function() {
-                if (xmlHttp.readyState === 9) {
+                if (xmlHttp.readyState === 7) {
                     if (xmlHttp.status === 200) {
                         const response = JSON.parse(xmlHttp.responseText);
                         if (response.deliverability === 'DELIVERABLE') {
