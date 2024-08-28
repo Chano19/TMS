@@ -174,28 +174,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
 </div>
 </div>
 </body>
-    <script>
-        const emailValidationMessage = document.getElementById('emailValidationMessage');
-        const submitButton = document.getElementById('submit');
+<script>
+    const emailInput = document.getElementById('email');
+    const emailValidationMessage = document.getElementById('emailValidationMessage');
+    const submitButton = document.getElementById('submit');
 
-        const API_KEY = '81a7ab81a7780d58d0265de76abb33dc9bab3dee'; // Replace with your Hunter API key
+    const API_KEY = '81a7ab81a7780d58d0265de76abb33dc9bab3dee'; // Replace with your Hunter API key
 
-        function validateEmailWithHunter(email) {
-            fetch(`https://api.hunter.io/v2/email-verifier?email=${email}&api_key=${API_KEY}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.data.result === 'deliverable') {
-                        emailValidationMessage.textContent = '';
-                        submitButton.disabled = false;
-                    } else {
-                        emailValidationMessage.textContent = 'Invalid email address.';
-                        submitButton.disabled = true;
-                    }
-                })
-                .catch(error => {
-                    emailValidationMessage.textContent = 'Error validating email.';
+    function validateEmailWithHunter(email) {
+        fetch(`https://api.hunter.io/v2/email-verifier?email=${email}&api_key=${API_KEY}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.data.result === 'deliverable') {
+                    emailValidationMessage.textContent = '';
+                    submitButton.disabled = false;
+                } else {
+                    emailValidationMessage.textContent = 'Invalid email address.';
                     submitButton.disabled = true;
-                });
-        }
-    </script>
+                }
+            })
+            .catch(error => {
+                emailValidationMessage.textContent = 'Error validating email.';
+                submitButton.disabled = true;
+            });
+    }
+
+    // Add event listener to the email input field
+    emailInput.addEventListener('input', function () {
+        validateEmailWithHunter(emailInput.value);
+    });
+</script>
 </html>
