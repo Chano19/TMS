@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['search'])) {
         $search = $_POST['search'];
     } else {
-	$search_query = "WHERE hub='Batangas' && role='Rider'";
+	$search_query = "WHERE hub='Pasay' && role='Rider'";
 }
  
 }
@@ -74,7 +74,7 @@ if ($search) {
     $search = $conn->real_escape_string($search);
     $search_query .= " AND (customer_name LIKE '%$search%' OR awbnumber LIKE '%$search%' OR product_id LIKE '%$search%')";
 } else {
-	$search_query = "WHERE hub='Batangas' && status='Assigned' || status='Delivered' || status='Cancel - First Attempt' || status='Cancel - Second Attempt' || status='Cancel - Third Attempt' || status='Return'";
+	$search_query = "WHERE hub='Pasay' && status='Assigned' || status='Delivered' || status='Cancel - First Attempt' || status='Cancel - Second Attempt' || status='Cancel - Third Attempt' || status='Return'";
 }
 
 
@@ -176,9 +176,9 @@ if (!$result) {
   <div class="wrapper sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px" style="justify-content: center;">
     <h3 class="text-center">Welcome to Rider Hub</h3>
-    <a href="rider_profile.php">Profile</a>
-    <a class="active" href="rider_batangas.php">Order</a>
-	  <a href="rider_remittance.php">Remittance</a>
+    <a href="riderpsy_profile.php">Profile</a>
+    <a class="active" href="riderpsy_order.php">Order</a>
+	<a href="riderpsy_remittance.php">Remittance</a>
     <a href="logout.php">Logout</a>
   </div>
 
@@ -188,7 +188,7 @@ if (!$result) {
 
       <h2 class="text-center p-5">List of Parcel</h2>
       <!-- Search Form -->
-      <form method="post" action="batangas_rider.php">
+      <form method="post" action="riderpsy_order.php">
         <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search...">
         <input type="submit" class="bg-success fw-bold" name="search_btn" value="Search">
       </form><br>
@@ -197,69 +197,69 @@ if (!$result) {
         <thead class="bg-info text-center fs-6">
           <tr>
             <th>Product ID</th>
-				    <th>AWB Number</th>
-				    <th>Customer Name</th>
-				    <th>Hub</th>
-				    <th>Address</th>
-				    <th>Contact</th>
-				    <th>Seller</th>
-				    <th>Weight</th>
-				    <th>Size</th>
-				    <th>Price</th>
-				    <th>Date/Time</th>
-				    <th>Status</th>
-				    <th>Image</th>
+				<th>AWB Number</th>
+				<th>Customer Name</th>
+				<th>Hub</th>
+				<th>Address</th>
+				<th>Contact</th>
+				<th>Seller</th>
+				<th>Weight</th>
+				<th>Size</th>
+				<th>Price</th>
+				<th>Date/Time</th>
+				<th>Status</th>
+				<th>Image</th>
             <th>Payment</th>
           </tr>
         </thead>
         <?php
         if ($result && $result->num_rows > 0) {
-          while($row = $result->fetch_assoc()) {
-            $image_path = $row["image"] ? 'uploads/' . $row["image"] : 'uploads/default.png'; // Default image if none uploaded
-            echo "<tr>
-              <td>" . $row["product_id"]. "</td>
-				      <td>" . $row["awbnumber"]. "</td>
-				      <td>" . $row["customer_name"]. "</td>
-				      <td>" . $row["hub"]. "</td>
-				      <td>" . $row["address"]. "</td>
-				      <td>" . $row["contact"]. "</td>
-				      <td>" . $row["seller"]. "</td>
-				      <td>" . $row["weight"]. "</td>
-				      <td>" . $row["size"]. "</td>
-				      <td>" . $row["price"]. "</td>
-				      <td>" . $row["datetime"]. "</td>
-              <td>
-                <form method='post' action='rider_batangas.php' enctype='multipart/form-data'>
-                  <input type='hidden' name='id' value='" . $row["id"] . "'>
-                  <select name='status' onchange='handleStatusChange(this)' data-current-status='" . $row["status"] . "' class='status-dropdown'>
-                    <option selected disabled>Choose...</option>
-                    <option value='Delivered' " . ($row["status"] == 'Delivered' ? 'selected' : '') . ">Delivered</option>
-                    <option value='Cancel - First Attempt' " . ($row["status"] == 'Cancel - First Attempt' ? 'selected' : '') . ">Cancel - First Attempt</option>
-                    <option value='Cancel - Second Attempt' " . ($row["status"] == 'Cancel - Second Attempt' ? 'selected' : '') . ">Cancel - Second Attempt</option>
-                    <option value='Cancel - Third Attempt' " . ($row["status"] == 'Cancel - Third Attempt' ? 'selected' : '') . ">Cancel - Third Attempt</option>
-                    <option value='Return' " . ($row["status"] == 'Return' ? 'selected' : '') . ">Return</option>
-                  </select>
-                  <div id='return-reason'>
-                    <input type='text' name='return_reason' placeholder='Reason for return'>
-                  </div>
-                    <input type='file' name='image'>
-                    <input type='submit' class='bg-success' name='update_status' value='Update'>
-                </form>
-              </td>
-              <td>
-                <img src='" . $image_path . "' class='img-preview' alt='Parcel Image'>
-              </td>
-              <td>
-                <form method='post' action='rider_batangas.php'>
-                  <input type='hidden' name='id' value='" . $row["id"] . "'>
-                  <input type='hidden' name='amount' value='" . $row["price"] . "'>
-                  <input type='submit' class='bg-success' name='pay' value='Pay'>
-                </form>
-              </td>
-            </tr>";
+            while($row = $result->fetch_assoc()) {
+                $image_path = $row["image"] ? 'uploads/' . $row["image"] : 'uploads/default.png'; // Default image if none uploaded
+                echo "<tr>
+						<td>" . $row["product_id"]. "</td>
+						<td>" . $row["awbnumber"]. "</td>
+						<td>" . $row["customer_name"]. "</td>
+						<td>" . $row["hub"]. "</td>
+						<td>" . $row["address"]. "</td>
+						<td>" . $row["contact"]. "</td>
+						<td>" . $row["seller"]. "</td>
+						<td>" . $row["weight"]. "</td>
+						<td>" . $row["size"]. "</td>
+						<td>" . $row["price"]. "</td>
+						<td>" . $row["datetime"]. "</td>
+						<td>
+							<form method='post' action='riderpsy_order.php' enctype='multipart/form-data'>
+								<input type='hidden' name='id' value='" . $row["id"] . "'>
+								<select name='status' onchange='handleStatusChange(this)' data-current-status='" . $row["status"] . "' class='status-dropdown'>
+									<option selected disabled>Choose...</option>
+									<option value='Delivered' " . ($row["status"] == 'Delivered' ? 'selected' : '') . ">Delivered</option>
+									<option value='Cancel - First Attempt' " . ($row["status"] == 'Cancel - First Attempt' ? 'selected' : '') . ">Cancel - First Attempt</option>
+									<option value='Cancel - Second Attempt' " . ($row["status"] == 'Cancel - Second Attempt' ? 'selected' : '') . ">Cancel - Second Attempt</option>
+									<option value='Cancel - Third Attempt' " . ($row["status"] == 'Cancel - Third Attempt' ? 'selected' : '') . ">Cancel - Third Attempt</option>
+									<option value='Return' " . ($row["status"] == 'Return' ? 'selected' : '') . ">Return</option>
+								</select>
+								<div id='return-reason'>
+									<input type='text' name='return_reason' placeholder='Reason for return'>
+								</div>
+									<input type='file' name='image'>
+									<input type='submit' class='bg-success' name='update_status' value='Update'>
+							</form>
+						</td>
+						<td>
+							<img src='" . $image_path . "' class='img-preview' alt='Parcel Image'>
+						</td>
+						<td>
+							<form method='post' action='riderpsy_order.php'>
+							<input type='hidden' name='id' value='" . $row["id"] . "'>
+							<input type='hidden' name='amount' value='" . $row["price"] . "'>
+							<input type='submit' class='bg-success' name='pay' value='Pay'>
+							</form>
+						</td>
+                </tr>";
             }
         } else {
-          echo "<tr><td colspan='11'>No data found</td></tr>";
+            echo "<tr><td colspan='11'>No data found</td></tr>";
         }
         $conn->close();
         ?>
@@ -288,11 +288,11 @@ if (!$result) {
                 dropdown.querySelector('option[value="Cancel - Second Attempt"]').disabled = true;
                 dropdown.querySelector('option[value="Cancel - Third Attempt"]').disabled = true;
             } else if (currentStatus === 'Cancel - Second Attempt') {
-                dropdown.querySelector('option[value="Cancel - First Attempt"]').disabled = true;
-            } else if (currentStatus === 'Cancel - Third Attempt') {
-                dropdown.querySelector('option[value="Cancel - First Attempt"]').disabled = true;
-                dropdown.querySelector('option[value="Cancel - Second Attempt"]').disabled = true;
-            }
+				dropdown.querySelector('option[value="Cancel - First Attempt"]').disabled = true;
+			} else if (currentStatus === 'Cancel - Third Attempt') {
+				dropdown.querySelector('option[value="Cancel - First Attempt"]').disabled = true;
+				dropdown.querySelector('option[value="Cancel - Second Attempt"]').disabled = true;
+			}
         });
     });
 

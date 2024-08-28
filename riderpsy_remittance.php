@@ -3,11 +3,11 @@ session_start();
 include('config.php'); // Include database connection
 
 // SQL query to get records based on specific conditions
-$sql = "SELECT id, awbnumber, price, datetime, status FROM manifests WHERE hub='Batangas' AND status='Delivered'";
+$sql = "SELECT id, awbnumber, price, datetime, status FROM manifests WHERE hub='Pasay' AND status='Delivered'";
 $result = $conn->query($sql);
 
 // Calculate total amount based on the same conditions
-$total_sql = "SELECT SUM(price) AS total_amount FROM manifests WHERE hub='Batangas' AND status='Delivered'";
+$total_sql = "SELECT SUM(price) AS total_amount FROM manifests WHERE hub='Pasay' AND status='Delivered'";
 $total_result = $conn->query($total_sql);
 $total_amount = $total_result->fetch_assoc()['total_amount'];
 
@@ -111,9 +111,9 @@ $conn->close();
   <div class="sidebar">
     <img class="rounded-pill mt-3 mx-auto d-block" src="images/crc.jpg" alt="" height="150px">
     <h3 class="text-center">Welcome to Rider Hub</h3>
-    <a href="rider_profile.php">Profile</a>
-    <a href="rider_batangas.php">Order</a>
-    <a class="active" href="rider_remittance.php">Remittance</a>
+    <a href="riderpsy_profile.php">Profile</a>
+    <a href="riderpsy_order.php">Order</a>
+    <a class="active" href="riderpsy_remittance.php">Remittance</a>
     <a href="logout.php">Logout</a>
   </div>
 
