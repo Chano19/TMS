@@ -124,14 +124,17 @@ $conn->close();
                 <div class="card bg-success p-2 text-center" style="flex: 1;">
                     <h2>Delivered</h2>
                     <h5>Total Parcel: <?php echo $delivered_count; ?></h5><br>
+                    <a class="text-white" href="admin_delivered.php">See parcel</a>
                 </div>
                 <div class="card bg-danger p-2 text-center" style="flex: 1;">
                     <h2>Cancel</h2>
                     <h5>Total Parcel: <?php echo $cancel_count; ?></h5><br>
+                    <a class="text-white" href="admin_cancel.php">See parcel</a>
                 </div>
                 <div class="card bg-warning p-2 text-center" style="flex: 1;">
                     <h2>Return</h2>
                     <h5>Total Parcel: <?php echo $return_count; ?></h5><br>
+                    <a class="text-white" href="admin_return.php">See parcel</a>
                 </div>
             </section>
         </main>
